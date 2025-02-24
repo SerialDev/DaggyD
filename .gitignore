@@ -4,5 +4,6 @@ __pycache__/
 dist/
 build/
 *.~undo-tree~
-~undo-tree~
+*~undo-tree~
 .egg-info
+*.egg-info/
