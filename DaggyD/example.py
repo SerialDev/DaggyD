@@ -1,4 +1,4 @@
-from daggyd import DaggyD, add_f_to_registry
+from .main import DaggyD, add_f_to_registry
 
 
 # extra args at ARbitrary position
