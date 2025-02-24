@@ -5,3 +5,4 @@ dist/
 build/
 *.~undo-tree~
 ~undo-tree~
+.egg-info
