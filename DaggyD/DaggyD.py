@@ -6,8 +6,9 @@ class DaggyD:
     def __init__(self):
         self.functions = {}
         self.executed = {}
-        self.output = {}
         self.ready_queue = deque()
+        self.output = {}
+        print("\033[36m[INIT] DAG Executor initialized\033[0m")
 
     def add_function(
         self,
@@ -61,12 +62,10 @@ class DaggyD:
     def execute(self, start_name, initial_outputs=None):
         if start_name not in self.functions:
             raise ValueError(f"\033[31mFunction {start_name} not found\033[0m")
-
         print(f"\033[36m\n[EXECUTION START] {start_name}\033[0m")
         for name in self.functions:
             self.executed[name] = "not started"
             print(f"\033[33m[INIT] {name}: status=not started\033[0m")
-
         if initial_outputs:
             for name, output in initial_outputs.items():
                 if name not in self.functions:
@@ -76,11 +75,9 @@ class DaggyD:
                 self.output[name] = output
                 self.executed[name] = "succeeded"
                 print(f"\033[32m[PRELOAD] {name}: output={output}\033[0m")
-
         self.ready_queue.append(start_name)
         self.executed[start_name] = "ready"
         print(f"\033[35m[QUEUE] {start_name} added to ready queue\033[0m")
-
         while self.ready_queue:
             current_name = self.ready_queue.popleft()
             print(f"\033[34m\n[PROCESSING] {current_name}\033[0m")
@@ -89,7 +86,6 @@ class DaggyD:
                     f"\033[33m[SKIP] {current_name}: status={self.executed[current_name]}\033[0m"
                 )
                 continue
-
             (
                 func,
                 input_deps,
@@ -98,7 +94,6 @@ class DaggyD:
                 extra_args_mapping,
                 extra_kwargs,
             ) = self.functions[current_name]
-
             if not all(
                 self.executed.get(dep, "not started") == "succeeded"
                 for dep in input_deps
@@ -107,7 +102,6 @@ class DaggyD:
                     f"\033[33m[DELAY] {current_name}: unmet dependencies {input_deps}\033[0m"
                 )
                 continue
-
             args = []
             kwargs = extra_kwargs.copy()
             for dep, mapping in input_mapping.items():
@@ -122,7 +116,6 @@ class DaggyD:
                     raise ValueError(
                         f"\033[31mInvalid input mapping for {dep}: {mapping}\033[0m"
                     )
-
             for key, value in extra_args_mapping.items():
                 if isinstance(key, int):
                     while len(args) <= key:
@@ -134,18 +127,15 @@ class DaggyD:
                     raise ValueError(
                         f"\033[31mInvalid extra_args_mapping key for {current_name}: {key}\033[0m"
                     )
-
             final_args = [arg for arg in args if arg is not None]
             print(
                 f"\033[35m[EXECUTING] {current_name}: args={final_args}, kwargs={kwargs}\033[0m"
             )
-
             try:
                 output = func(*final_args, **kwargs)
                 self.output[current_name] = output
                 self.executed[current_name] = "succeeded"
                 print(f"\033[32m[SUCCESS] {current_name}: output={output}\033[0m")
-
                 for dep in self.get_success_dependencies(current_name):
                     if self.is_ready(dep):
                         self.ready_queue.append(dep)
@@ -157,20 +147,12 @@ class DaggyD:
                 self.executed[current_name] = "failed"
                 print(f"\033[31m[FAIL] {current_name}: {e}\033[0m")
                 traceback.print_exc()
-
                 for dep in failure_deps:
                     if self.is_ready(dep):
                         self.ready_queue.append(dep)
                         self.executed[dep] = "ready"
                         print(
                             f"\033[35m[QUEUE] {dep} added due to failure of {current_name}\033[0m"
-                        )
-
-                for dep in self.get_success_dependencies(current_name):
-                    if self.executed[dep] == "not started":
-                        self.executed[dep] = "failed"
-                        print(
-                            f"\033[31m[CASCADE FAIL] {dep} marked failed due to {current_name}\033[0m"
                         )
 
     def get_success_dependencies(self, name):
