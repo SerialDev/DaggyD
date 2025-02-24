@@ -182,6 +182,32 @@ class DaggyD:
         return True
 
 
+# Standalone function to add a function to multiple DAGs
+def add_f_to_registry(
+    dags,
+    name,
+    input_deps,
+    failure_deps,
+    input_mapping,
+    extra_args_mapping=None,
+    extra_kwargs=None,
+):
+    def decorator(func):
+        for dag in dags:
+            dag.add_function(
+                name,
+                func,
+                input_deps,
+                failure_deps,
+                input_mapping,
+                extra_args_mapping,
+                extra_kwargs,
+            )
+        return func
+
+    return decorator
+
+
 # extra args at ARbitrary position
 dag = DaggyD()
 
@@ -314,3 +340,55 @@ print(f"Func1: {dag.output.get('func1', 'Not executed')}")
 print(f"Func2: {dag.output.get('func2', 'Not executed')}")
 print(f"Func3: {dag.output.get('func3', 'Not executed')}")
 print(f"Error Handler: {dag.output.get('error_handler', 'Not executed')}")
+
+
+import traceback
+from collections import deque
+
+dag1 = DaggyD()
+dag2 = DaggyD()
+
+dags = [dag1, dag2]
+
+
+def func1():
+    print("Executing func1")
+    return "output_from_func1"
+
+
+def func2(param0, param_from_func1):
+    print(
+        f"Executing func2 with param0: {param0}, param_from_func1: {param_from_func1}"
+    )
+    return f"output_from_func2_with_{param0}_and_{param_from_func1}"
+
+
+def error_handler():
+    print("Error occurred, handling failure")
+    return "error_handled"
+
+
+add_f_to_registry(dags, "func1", [], ["error_handler"], {})(func1)
+add_f_to_registry(
+    dags,
+    "func2",
+    ["func1"],
+    ["error_handler"],
+    {"func1": 1},
+    extra_args_mapping={0: "extra_at_0"},
+)(func2)
+add_f_to_registry(dags, "error_handler", [], [], {})(error_handler)
+
+print("\n=== Testing DAG 1 ===")
+dag1.execute("func1")
+print("\nFinal Outputs DAG 1:")
+print(f"Func1: {dag1.output.get('func1', 'Not executed')}")
+print(f"Func2: {dag1.output.get('func2', 'Not executed')}")
+print(f"Error Handler: {dag1.output.get('error_handler', 'Not executed')}")
+
+print("\n=== Testing DAG 2 ===")
+dag2.execute("func1")
+print("\nFinal Outputs DAG 2:")
+print(f"Func1: {dag2.output.get('func1', 'Not executed')}")
+print(f"Func2: {dag2.output.get('func2', 'Not executed')}")
+print(f"Error Handler: {dag2.output.get('error_handler', 'Not executed')}")
