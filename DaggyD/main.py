@@ -59,107 +59,125 @@ class DaggyD:
 
         return decorator
 
-
     def execute(self, start_name, initial_outputs=None):
-    if start_name not in self.functions:
-        raise ValueError(f"\033[31mFunction {start_name} not found\033[0m")
-    print(f"\033[36m\n[EXECUTION START] {start_name}\033[0m")
+        if start_name not in self.functions:
+            raise ValueError(f"\033[31mFunction {start_name} not found\033[0m")
+        print(f"\033[36m\n[EXECUTION START] {start_name}\033[0m")
 
-    # Initialize execution state
-    for name in self.functions:
-        self.executed[name] = "not started"
-        print(f"\033[33m[INIT] {name}: status=not started\033[0m")
+        # Initialize execution state
+        for name in self.functions:
+            self.executed[name] = "not started"
+            print(f"\033[33m[INIT] {name}: status=not started\033[0m")
 
-    # Fix: Assign initial outputs and mark them as succeeded
-    if initial_outputs:
-        for name, output in initial_outputs.items():
-            self.output[name] = output
-            self.executed[name] = "succeeded"
-            print(f"\033[32m[PRELOAD] {name}: output={output}\033[0m")
+        # Fix: Assign initial outputs and mark them as succeeded
+        if initial_outputs:
+            for name, output in initial_outputs.items():
+                self.output[name] = output
+                self.executed[name] = "succeeded"
+                print(f"\033[32m[PRELOAD] {name}: output={output}\033[0m")
 
-    self.ready_queue.append(start_name)
-    self.executed[start_name] = "ready"
-    print(f"\033[35m[QUEUE] {start_name} added to ready queue\033[0m")
+        self.ready_queue.append(start_name)
+        self.executed[start_name] = "ready"
+        print(f"\033[35m[QUEUE] {start_name} added to ready queue\033[0m")
 
-    while self.ready_queue:
-        current_name = self.ready_queue.popleft()
-        print(f"\033[34m\n[PROCESSING] {current_name}\033[0m")
-        if self.executed[current_name] != "ready":
-            print(f"\033[33m[SKIP] {current_name}: status={self.executed[current_name]}\033[0m")
-            continue
+        while self.ready_queue:
+            current_name = self.ready_queue.popleft()
+            print(f"\033[34m\n[PROCESSING] {current_name}\033[0m")
+            if self.executed[current_name] != "ready":
+                print(
+                    f"\033[33m[SKIP] {current_name}: status={self.executed[current_name]}\033[0m"
+                )
+                continue
 
-        (
-            func,
-            input_deps,
-            failure_deps,
-            input_mapping,
-            extra_args_mapping,
-            extra_kwargs,
-        ) = self.functions[current_name]
+            (
+                func,
+                input_deps,
+                failure_deps,
+                input_mapping,
+                extra_args_mapping,
+                extra_kwargs,
+            ) = self.functions[current_name]
 
-        # Fix: Check if all input dependencies are available
-        if not all(self.executed.get(dep, "not started") == "succeeded" for dep in input_deps):
-            print(f"\033[33m[DELAY] {current_name}: unmet dependencies {input_deps}\033[0m")
-            continue
+            # Fix: Check if all input dependencies are available
+            if not all(
+                self.executed.get(dep, "not started") == "succeeded"
+                for dep in input_deps
+            ):
+                print(
+                    f"\033[33m[DELAY] {current_name}: unmet dependencies {input_deps}\033[0m"
+                )
+                continue
 
-        args = []
-        kwargs = extra_kwargs.copy()
+            args = []
+            kwargs = extra_kwargs.copy()
 
-        # Fix: Map `initial_outputs` to function arguments
-        for dep, mapping in input_mapping.items():
-            output = self.output.get(dep, None)
-            if output is None:
-                raise ValueError(f"\033[31mMissing required input {dep} for {current_name}\033[0m")
-            if isinstance(mapping, int):
-                while len(args) <= mapping:
-                    args.append(None)
-                args[mapping] = output
-            elif isinstance(mapping, str):
-                kwargs[mapping] = output
-            else:
-                raise ValueError(f"\033[31mInvalid input mapping for {dep}: {mapping}\033[0m")
+            # Fix: Map `initial_outputs` to function arguments
+            for dep, mapping in input_mapping.items():
+                output = self.output.get(dep, None)
+                if output is None:
+                    raise ValueError(
+                        f"\033[31mMissing required input {dep} for {current_name}\033[0m"
+                    )
+                if isinstance(mapping, int):
+                    while len(args) <= mapping:
+                        args.append(None)
+                    args[mapping] = output
+                elif isinstance(mapping, str):
+                    kwargs[mapping] = output
+                else:
+                    raise ValueError(
+                        f"\033[31mInvalid input mapping for {dep}: {mapping}\033[0m"
+                    )
 
-        # Fix: Handle extra arguments
-        for key, value in extra_args_mapping.items():
-            if isinstance(key, int):
-                while len(args) <= key:
-                    args.append(None)
-                args[key] = value
-            elif isinstance(key, str):
-                kwargs[key] = value
-            else:
-                raise ValueError(f"\033[31mInvalid extra_args_mapping key for {current_name}: {key}\033[0m")
+            # Fix: Handle extra arguments
+            for key, value in extra_args_mapping.items():
+                if isinstance(key, int):
+                    while len(args) <= key:
+                        args.append(None)
+                    args[key] = value
+                elif isinstance(key, str):
+                    kwargs[key] = value
+                else:
+                    raise ValueError(
+                        f"\033[31mInvalid extra_args_mapping key for {current_name}: {key}\033[0m"
+                    )
 
-        final_args = [arg for arg in args if arg is not None]
+            final_args = [arg for arg in args if arg is not None]
 
-        print(f"\033[35m[EXECUTING] {current_name}: args={final_args}, kwargs={kwargs}\033[0m")
+            print(
+                f"\033[35m[EXECUTING] {current_name}: args={final_args}, kwargs={kwargs}\033[0m"
+            )
 
-        try:
-            # Fix: If the function is in `initial_outputs`, pass its value
-            if current_name in initial_outputs:
-                final_args.insert(0, initial_outputs[current_name])
+            try:
+                # Fix: If the function is in `initial_outputs`, pass its value
+                if current_name in initial_outputs:
+                    final_args.insert(0, initial_outputs[current_name])
 
-            output = func(*final_args, **kwargs)
-            self.output[current_name] = output
-            self.executed[current_name] = "succeeded"
-            print(f"\033[32m[SUCCESS] {current_name}: output={output}\033[0m")
+                output = func(*final_args, **kwargs)
+                self.output[current_name] = output
+                self.executed[current_name] = "succeeded"
+                print(f"\033[32m[SUCCESS] {current_name}: output={output}\033[0m")
 
-            for dep in self.get_success_dependencies(current_name):
-                if self.is_ready(dep):
-                    self.ready_queue.append(dep)
-                    self.executed[dep] = "ready"
-                    print(f"\033[35m[QUEUE] {dep} added due to success of {current_name}\033[0m")
+                for dep in self.get_success_dependencies(current_name):
+                    if self.is_ready(dep):
+                        self.ready_queue.append(dep)
+                        self.executed[dep] = "ready"
+                        print(
+                            f"\033[35m[QUEUE] {dep} added due to success of {current_name}\033[0m"
+                        )
 
-        except Exception as e:
-            self.executed[current_name] = "failed"
-            print(f"\033[31m[FAIL] {current_name}: {e}\033[0m")
-            traceback.print_exc()
+            except Exception as e:
+                self.executed[current_name] = "failed"
+                print(f"\033[31m[FAIL] {current_name}: {e}\033[0m")
+                traceback.print_exc()
 
-            for dep in failure_deps:
-                if self.is_ready(dep):
-                    self.ready_queue.append(dep)
-                    self.executed[dep] = "ready"
-                    print(f"\033[35m[QUEUE] {dep} added due to failure of {current_name}\033[0m")
+                for dep in failure_deps:
+                    if self.is_ready(dep):
+                        self.ready_queue.append(dep)
+                        self.executed[dep] = "ready"
+                        print(
+                            f"\033[35m[QUEUE] {dep} added due to failure of {current_name}\033[0m"
+                        )
 
     def get_success_dependencies(self, name):
         success_deps = [
