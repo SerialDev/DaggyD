@@ -2,6 +2,81 @@ import traceback
 from collections import deque
 
 
+def extract_traceback_info(traceback_str):
+    import os
+    import re
+
+    lines = traceback_str.strip().split("\n")
+    last_trace = None
+    error_msg = None
+
+    for i in range(len(lines) - 1, -1, -1):
+        if "File " in lines[i] and ", line " in lines[i]:
+            last_trace = lines[i]
+            error_msg = lines[i + 1] if i + 1 < len(lines) else "Unknown Error"
+            break
+
+    if last_trace:
+        match = re.search(r'File "(.*?)", line (\d+), in (.*)', last_trace)
+        if match:
+            file_path, line_number, function_name = match.groups()
+            short_path = "/".join(file_path.replace("\\", "/").split("/")[-3:])
+            return f"{error_msg.strip()} (File: {short_path}, Line: {line_number}, Function: {function_name})"
+
+    return "Unknown Error"
+
+
+def stringify_truncated(obj, max_len=500):
+    from numpy import ndarray
+    from pandas import DataFrame, Series
+    from itertools import islice
+
+    def slice_iterable(it, n_head=3, n_tail=2):
+        it = iter(it)
+        head = list(islice(it, n_head))
+        tail = list(it)[-n_tail:] if n_tail else []
+        return (
+            head + ["..."] + tail
+            if len(head) + len(tail) < len(head) + len(tail)
+            else head + tail
+        )
+
+    if isinstance(obj, (ndarray, Series)):
+        obj = obj.flat if isinstance(obj, ndarray) else iter(obj)
+    elif isinstance(obj, DataFrame):
+        col_list = list(obj.columns)
+        col_trunc = (
+            col_list[:3] + (["..."] if len(col_list) > 5 else []) + col_list[-2:]
+            if len(col_list) > 5
+            else col_list
+        )
+
+        row_trunc = [
+            {col: row[idx] for idx, col in enumerate(col_trunc)}
+            for row in islice(obj.itertuples(index=False, name=None), 3)
+        ]
+
+        if len(obj) > 5:
+            row_trunc.append("...")
+            row_trunc.extend(
+                [
+                    {col: row[idx] for idx, col in enumerate(col_trunc)}
+                    for row in islice(
+                        obj.itertuples(index=False, name=None), len(obj) - 2, None
+                    )
+                ]
+            )
+        obj = row_trunc
+    elif isinstance(obj, (set, frozenset)):
+        obj = iter(obj)
+
+    if hasattr(obj, "__iter__") and not isinstance(obj, (str, bytes, dict)):
+        obj = slice_iterable(obj)
+
+    s = str(obj)
+    return s if len(s) <= max_len else s[:max_len] + "..."
+
+
 class DaggyD:
     def __init__(self):
         self.functions = {}
@@ -25,7 +100,7 @@ class DaggyD:
         extra_args_mapping = extra_args_mapping or {}
         extra_kwargs = extra_kwargs or {}
         print(
-            f"\033[36m[REGISTER] {name}: input_deps={input_deps}, failure_deps={failure_deps}, input_mapping={input_mapping}, extra_args_mapping={extra_args_mapping}, extra_kwargs={extra_kwargs}\033[0m"
+            f"\033[36m[REGISTER] {name}: input_deps={stringify_truncated(input_deps)}, failure_deps={failure_deps}, input_mapping={stringify_truncated(input_mapping)}, extra_args_mapping={extra_args_mapping}, extra_kwargs={extra_kwargs}\033[0m"
         )
         self.functions[name] = (
             func,
@@ -64,30 +139,42 @@ class DaggyD:
             raise ValueError(f"\033[31mFunction {start_name} not found\033[0m")
         print(f"\033[36m\n[EXECUTION START] {start_name}\033[0m")
 
-        # Initialize execution state
+        # Initialize all functions to "not started".
         for name in self.functions:
             self.executed[name] = "not started"
             print(f"\033[33m[INIT] {name}: status=not started\033[0m")
 
-        # Fix: Assign initial outputs and mark them as succeeded
+        # Preload any initial outputs and mark them as succeeded.
         if initial_outputs:
             for name, output in initial_outputs.items():
                 self.output[name] = output
                 self.executed[name] = "succeeded"
-                print(f"\033[32m[PRELOAD] {name}: output={output}\033[0m")
+                print(
+                    f"\033[32m[PRELOAD] {name}: output={stringify_truncated(output)}\033[0m"
+                )
 
+        # Enqueue the starting function.
         self.ready_queue.append(start_name)
         self.executed[start_name] = "ready"
         print(f"\033[35m[QUEUE] {start_name} added to ready queue\033[0m")
 
         while self.ready_queue:
             current_name = self.ready_queue.popleft()
-            print(f"\033[34m\n[PROCESSING] {current_name}\033[0m")
-            if self.executed[current_name] != "ready":
+
+            # --- OVERRIDE: Force error_handler to be "ready" if errors remain ---
+            if current_name == "error_handler":
+                if (
+                    current_name in self.output
+                    and isinstance(self.output[current_name], list)
+                    and len(self.output[current_name]) > 0
+                ):
+                    self.executed[current_name] = "ready"
+            elif self.executed[current_name] != "ready":
                 print(
                     f"\033[33m[SKIP] {current_name}: status={self.executed[current_name]}\033[0m"
                 )
                 continue
+            # --- END OVERRIDE ---
 
             (
                 func,
@@ -98,20 +185,19 @@ class DaggyD:
                 extra_kwargs,
             ) = self.functions[current_name]
 
-            # Fix: Check if all input dependencies are available
+            # Check that all input dependencies have succeeded.
             if not all(
                 self.executed.get(dep, "not started") == "succeeded"
                 for dep in input_deps
             ):
                 print(
-                    f"\033[33m[DELAY] {current_name}: unmet dependencies {input_deps}\033[0m"
+                    f"\033[33m[DELAY] {current_name}: unmet dependencies {stringify_truncated(input_deps)}\033[0m"
                 )
                 continue
 
+            # Build positional (args) and keyword (kwargs) parameters.
             args = []
             kwargs = extra_kwargs.copy()
-
-            # Fix: Map `initial_outputs` to function arguments
             for dep, mapping in input_mapping.items():
                 output = self.output.get(dep, None)
                 if output is None:
@@ -128,8 +214,6 @@ class DaggyD:
                     raise ValueError(
                         f"\033[31mInvalid input mapping for {dep}: {mapping}\033[0m"
                     )
-
-            # Fix: Handle extra arguments
             for key, value in extra_args_mapping.items():
                 if isinstance(key, int):
                     while len(args) <= key:
@@ -141,23 +225,71 @@ class DaggyD:
                     raise ValueError(
                         f"\033[31mInvalid extra_args_mapping key for {current_name}: {key}\033[0m"
                     )
-
             final_args = [arg for arg in args if arg is not None]
 
             print(
-                f"\033[35m[EXECUTING] {current_name}: args={final_args}, kwargs={kwargs}\033[0m"
+                f"\033[35m[EXECUTING] {current_name}: args={stringify_truncated(final_args)}, kwargs={kwargs}\033[0m"
             )
 
             try:
-                # Fix: If the function is in `initial_outputs`, pass its value
-                if current_name in initial_outputs:
+                # Prepend initial output if available.
+                if initial_outputs and current_name in initial_outputs:
                     final_args.insert(0, initial_outputs[current_name])
+                failure_kwargs = {}
 
-                output = func(*final_args, **kwargs)
-                self.output[current_name] = output
-                self.executed[current_name] = "succeeded"
-                print(f"\033[32m[SUCCESS] {current_name}: output={output}\033[0m")
+                # --- ERROR HANDLER BRANCH ---
+                if current_name == "error_handler":
+                    if (
+                        current_name in self.output
+                        and isinstance(self.output[current_name], list)
+                        and self.output[current_name]
+                    ):
+                        # Pop one error record.
+                        failure_kwargs = self.output[current_name].pop(0)
+                        print(
+                            f"            - Failure step: {failure_kwargs.get('error_step', 'UNKNOWN_STEP')}"
+                        )
+                        print(
+                            f"            - ERROR MESSAGE: ❌ {failure_kwargs.get('error_message', 'UNKNOWN_ERROR')}"
+                        )
+                        # Requeue error_handler only if there are still errors left.
+                        if len(self.output[current_name]) > 0:
+                            self.ready_queue.append(current_name)
+                            self.executed[current_name] = "ready"
+                            print(
+                                f"\033[35m[QUEUE] {current_name} re-added to process remaining errors ({len(self.output[current_name])} left)\033[0m"
+                            )
+                    # If no error details were found, skip this execution.
+                    if not failure_kwargs:
+                        print(
+                            f"\033[33m[INFO] No error details for {current_name}; skipping its execution.\033[0m"
+                        )
+                        continue
+                # --- END ERROR HANDLER BRANCH ---
 
+                # Execute the function.
+                output = func(*final_args, **kwargs, **failure_kwargs)
+                # For non-error handlers, store the output normally.
+                if current_name != "error_handler":
+                    self.output[current_name] = output
+                    self.executed[current_name] = "succeeded"
+                    print(
+                        f"\033[32m[SUCCESS] {current_name}: output={stringify_truncated(output)}\033[0m"
+                    )
+                else:
+                    # For error_handler, do NOT overwrite self.output["error_handler"]
+                    # Instead, just indicate that this error record was processed.
+                    if not (
+                        current_name in self.output
+                        and isinstance(self.output[current_name], list)
+                        and self.output[current_name]
+                    ):
+                        self.executed[current_name] = "succeeded"
+                        print(
+                            f"\033[32m[SUCCESS] {current_name}: All errors processed.\033[0m"
+                        )
+
+                # Enqueue any dependent functions.
                 for dep in self.get_success_dependencies(current_name):
                     if self.is_ready(dep):
                         self.ready_queue.append(dep)
@@ -168,16 +300,31 @@ class DaggyD:
 
             except Exception as e:
                 self.executed[current_name] = "failed"
+                error_message = str(traceback.format_exc())
+                # Create an independent error record.
+                error_record = {
+                    "error_step": str(current_name),
+                    "error_message": error_message,
+                }
                 print(f"\033[31m[FAIL] {current_name}: {e}\033[0m")
-                traceback.print_exc()
+                print(f"\033[33m[ERROR TRACE] {error_message}\033[0m")
 
                 for dep in failure_deps:
-                    if self.is_ready(dep):
-                        self.ready_queue.append(dep)
-                        self.executed[dep] = "ready"
-                        print(
-                            f"\033[35m[QUEUE] {dep} added due to failure of {current_name}\033[0m"
-                        )
+                    self.executed[dep] = "ready"
+                    self.ready_queue.append(dep)
+                    print(
+                        f"\033[35m[QUEUE] {dep} added due to failure of {current_name}\033[0m"
+                    )
+                    if dep not in self.output:
+                        self.output[dep] = []
+                    elif not isinstance(self.output[dep], list):
+                        self.output[dep] = [self.output[dep]]
+                    self.output[dep].append(error_record)
+                    print(
+                        f"\033[35m[STORE] Error recorded for {dep}: {error_record['error_step']}\033[0m"
+                    )
+
+    # ------------------------------------------------------------------------- #
 
     def get_success_dependencies(self, name):
         success_deps = [
@@ -230,3 +377,74 @@ def add_f_to_registry(
         return func
 
     return decorator
+
+
+import sqlite3
+import pickle
+from collections import deque
+
+
+def save_daggy(daggy_instance, db_path):
+    conn = sqlite3.connect(db_path)
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS dag_def (id INTEGER PRIMARY KEY, functions BLOB)"
+    )
+    serialized_functions = pickle.dumps(daggy_instance.functions)
+    conn.execute(
+        "REPLACE INTO dag_def (id, functions) VALUES (?, ?)", (1, serialized_functions)
+    )
+    conn.commit()
+    conn.close()
+
+
+def load_daggy(db_path):
+    conn = sqlite3.connect(db_path)
+    cur = conn.cursor()
+    cur.execute("SELECT functions FROM dag_def WHERE id=?", (1,))
+    row = cur.fetchone()
+    conn.close()
+    if row:
+        functions = pickle.loads(row[0])
+        daggy_instance = DaggyD()
+        daggy_instance.functions = functions
+        return daggy_instance
+    raise ValueError("No saved DaggyD instance found.")
+
+
+def save_execution_state(daggy_instance, db_path):
+    conn = sqlite3.connect(db_path)
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS execution_state (
+            id INTEGER PRIMARY KEY, output BLOB, executed BLOB, ready_queue BLOB)
+    """
+    )
+    serialized_output = pickle.dumps(daggy_instance.output)
+    serialized_executed = pickle.dumps(daggy_instance.executed)
+    serialized_ready_queue = pickle.dumps(list(daggy_instance.ready_queue))
+    conn.execute(
+        """
+        REPLACE INTO execution_state (id, output, executed, ready_queue) 
+        VALUES (?, ?, ?, ?)""",
+        (1, serialized_output, serialized_executed, serialized_ready_queue),
+    )
+    conn.commit()
+    conn.close()
+
+
+def load_execution_state(daggy_instance, db_path):
+    conn = sqlite3.connect(db_path)
+    cur = conn.cursor()
+    cur.execute(
+        """
+        SELECT output, executed, ready_queue FROM execution_state WHERE id=?""",
+        (1,),
+    )
+    row = cur.fetchone()
+    conn.close()
+    if row:
+        daggy_instance.output = pickle.loads(row[0])
+        daggy_instance.executed = pickle.loads(row[1])
+        daggy_instance.ready_queue = deque(pickle.loads(row[2]))
+        return daggy_instance
+    raise ValueError("No saved execution state found.")
