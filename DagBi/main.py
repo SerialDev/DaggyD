@@ -448,3 +448,89 @@ def load_execution_state(daggy_instance, db_path):
         daggy_instance.ready_queue = deque(pickle.loads(row[2]))
         return daggy_instance
     raise ValueError("No saved execution state found.")
+
+
+def reset_execution_state(daggy_instance):
+    daggy_instance.executed = {name: "not started" for name in daggy_instance.functions}
+    daggy_instance.output = {}
+    daggy_instance.ready_queue = deque()
+
+
+def visualize_dag(daggy_instance):
+    from collections import defaultdict
+
+    deps_graph = defaultdict(list)
+
+    for name, (
+        _,
+        input_deps,
+        failure_deps,
+        _,
+        _,
+        _,
+    ) in daggy_instance.functions.items():
+        for dep in input_deps:
+            deps_graph[dep].append(name)
+        for dep in failure_deps:
+            deps_graph[dep].append(
+                f"{name} \033[31m(failure path)\033[0m"
+            )  # Red for failure paths
+
+    def dfs(node, depth=0, visited=None):
+        if visited is None:
+            visited = set()
+
+        color = (
+            "\033[36m" if depth % 2 == 0 else "\033[35m"
+        )  # Alternates between cyan & magenta
+        print(f"{'  ' * depth}{color}- {node}\033[0m")
+
+        visited.add(node)
+        for child in deps_graph.get(node, []):
+            if child not in visited:
+                dfs(child, depth + 1, visited)
+
+    roots = [
+        name
+        for name in daggy_instance.functions
+        if all(name not in deps for deps in deps_graph.values())
+    ]
+
+    print("\n\033[36m=== DAG Dependency Visualization ===\033[0m")
+
+    if not roots:
+        print("\033[33m(No root nodes found)\033[0m")  # Yellow for warnings
+
+    for root in roots:
+        dfs(root)
+
+    print("\033[36m====================================\033[0m\n")
+
+
+def visualize_state(daggy_instance):
+    print("\n\033[36m=== DAG Execution State ===\033[0m")
+
+    for name in daggy_instance.functions:
+        status = daggy_instance.executed.get(name, "not started")
+        output = daggy_instance.output.get(name, "<no output yet>")
+
+        print(f"\n\033[35mNode:\033[0m {name}")
+        if status == "completed":
+            status_color = "\033[32m"  # Green for success
+        elif status == "error":
+            status_color = "\033[31m"  # Red for errors
+        else:
+            status_color = "\033[33m"  # Yellow for in-progress/not started
+
+        print(f"  \033[35mStatus:\033[0m {status_color}{status}\033[0m")
+        print(f"  \033[35mOutput:\033[0m {stringify_truncated(output, max_len=200)}")
+
+    rqueue = list(daggy_instance.ready_queue)
+    print("\n\033[36m--- Ready Queue ---\033[0m")
+    if rqueue:
+        for i, node in enumerate(rqueue, 1):
+            print(f"  {i}. {node}")
+    else:
+        print("  \033[33m(empty)\033[0m")
+
+    print("\033[36m===========================\033[0m\n")
