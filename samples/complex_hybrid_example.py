@@ -26,9 +26,9 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from DagBi.pregel_core import pregel, add_channel, add_node
-from DagBi.petri_net import petri_net, add_place, add_transition
-from DagBi.hybrid import render_hybrid_animation
+from DaggyD.pregel_core import pregel, add_channel, add_node
+from DaggyD.petri_net import petri_net, add_place, add_transition
+from DaggyD.hybrid import render_hybrid_animation
 
 OUTPUT_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),

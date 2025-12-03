@@ -8,8 +8,8 @@ import os
 import tempfile
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from DagBi.channels import create_place_channel
-from DagBi.petri_net import PetriNet
+from DaggyD.channels import create_place_channel
+from DaggyD.petri_net import PetriNet
 
 
 class TestPlaceChannel(unittest.TestCase):

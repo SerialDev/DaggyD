@@ -4,7 +4,7 @@ import os
 import tempfile
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from DagBi.pregel_core import Pregel, PregelParallel, create_node_builder, create_pregel_graph
+from DaggyD.pregel_core import Pregel, PregelParallel, create_node_builder, create_pregel_graph
 
 
 class TestPregelCore(unittest.TestCase):

@@ -1,11 +1,11 @@
-# DagBi
+# DaggyD
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
 > **A functional Python framework for graph processing, workflow orchestration, and concurrent systems modeling.**
 
-DagBi combines three powerful computation models into one cohesive framework:
+DaggyD combines three powerful computation models into one cohesive framework:
 
 - **Pregel** - Google's BSP (Bulk Synchronous Parallel) model for graph algorithms
 - **Petri Nets** - Token-based concurrent systems with deadlock detection  
@@ -28,8 +28,8 @@ This means:
 ### Installation
 
 ```bash
-git clone https://github.com/yourusername/DagBi.git
-cd DagBi
+git clone https://github.com/yourusername/DaggyD.git
+cd DaggyD
 pip install -e .
 
 # For visualization (optional)
@@ -40,7 +40,7 @@ brew install graphviz imagemagick  # macOS
 ### Example 1: Counter (Pregel)
 
 ```python
-from DagBi.pregel_core import pregel, add_channel, add_node, run
+from DaggyD.pregel_core import pregel, add_channel, add_node, run
 
 # Create graph with a counter channel
 p = pregel()
@@ -62,7 +62,7 @@ print(result["count"])  # Output: 5
 ### Example 2: Producer-Consumer (Petri Net)
 
 ```python
-from DagBi.petri_net import PetriNet
+from DaggyD.petri_net import PetriNet
 
 net = PetriNet()
 net.add_place("buffer", capacity=3, initial_tokens=0)
@@ -83,7 +83,7 @@ print(result)  # Token distribution
 ### Example 3: Deadlock Detection
 
 ```python
-from DagBi.petri_net import PetriNet
+from DaggyD.petri_net import PetriNet
 
 # Dining philosophers that CAN deadlock
 net = PetriNet()
@@ -147,7 +147,7 @@ Superstep N: [Plan] -> [Execute Nodes] -> [Update Channels] -> Superstep N+1
 #### Example: PageRank
 
 ```python
-from DagBi.pregel_core import pregel, add_channel, add_node, run
+from DaggyD.pregel_core import pregel, add_channel, add_node, run
 
 GRAPH = {"A": ["B", "C"], "B": ["C"], "C": ["A"]}
 DAMPING = 0.85
@@ -218,7 +218,7 @@ Petri nets model concurrent systems with places (hold tokens) and transitions (m
 #### OOP API
 
 ```python
-from DagBi.petri_net import PetriNet
+from DaggyD.petri_net import PetriNet
 
 net = PetriNet(debug=True)
 net.add_place("p1", capacity=5, initial_tokens=3)
@@ -249,7 +249,7 @@ print(net.analyze_reachability())
 DaggyD provides a traditional DAG execution engine with dependency resolution, error handling, and state persistence.
 
 ```python
-from DagBi.main import DaggyD
+from DaggyD.main import DaggyD
 
 dag = DaggyD()
 
@@ -303,14 +303,14 @@ dag.execute("fetch_data")
 
 ### Hybrid Workflows (Petri Net + Pregel)
 
-DagBi's power comes from combining computation models:
+DaggyD's power comes from combining computation models:
 - **Petri Net**: Orchestrates workflow stages and resource management
 - **Pregel**: Executes distributed graph computations
 
 ```python
-from DagBi.petri_net import petri_net, add_place, add_transition
-from DagBi.pregel_core import pregel, add_channel, add_node, run
-from DagBi.hybrid import render_hybrid_animation
+from DaggyD.petri_net import petri_net, add_place, add_transition
+from DaggyD.pregel_core import pregel, add_channel, add_node, run
+from DaggyD.hybrid import render_hybrid_animation
 
 # Create Petri net for workflow orchestration
 net = petri_net()
@@ -372,13 +372,13 @@ All engines support Graphviz visualization and animated GIFs.
 
 ```python
 # Static export
-from DagBi.pregel_core import save_graphviz, render_graphviz
+from DaggyD.pregel_core import save_graphviz, render_graphviz
 
 save_graphviz(p, "graph.dot")
 render_graphviz(p, "graph", format="png")
 
 # Animated GIF
-from DagBi.pregel_core import render_animation
+from DaggyD.pregel_core import render_animation
 
 render_animation(p, "animation", 
     max_supersteps=20,
@@ -394,7 +394,7 @@ net.save_graphviz_reachability("reachability.dot")
 net.render_graphviz_reachability("reachability", format="png")
 
 # Animations show reachability graph when deadlock detected
-from DagBi.petri_net import render_animation
+from DaggyD.petri_net import render_animation
 render_animation(net, "petri_anim", max_steps=10, title="Workflow")
 ```
 
@@ -445,7 +445,7 @@ Generated files are saved to `example_outputs/`:
 python -m pytest tests/ -v
 
 # With coverage
-python -m pytest tests/ --cov=DagBi
+python -m pytest tests/ --cov=DaggyD
 ```
 
 ---
@@ -453,8 +453,8 @@ python -m pytest tests/ --cov=DagBi
 ## Project Structure
 
 ```
-DagBi/
-├── DagBi/
+DaggyD/
+├── DaggyD/
 │   ├── pregel_core.py    # Pregel BSP engine
 │   ├── petri_net.py      # Petri net engine
 │   ├── channels.py       # Channel implementations

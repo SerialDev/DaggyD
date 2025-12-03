@@ -24,7 +24,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from DagBi.pregel_core import (
+from DaggyD.pregel_core import (
     pregel, add_channel, add_node, run,
     save_graphviz, save_graphviz_dataflow,
     render_graphviz, render_graphviz_dataflow

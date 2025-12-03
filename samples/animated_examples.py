@@ -17,11 +17,11 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from DagBi.pregel_core import (
+from DaggyD.pregel_core import (
     pregel, add_channel, add_node, reset,
     render_animation as pregel_render_animation
 )
-from DagBi.petri_net import (
+from DaggyD.petri_net import (
     petri_net, add_place, add_transition, reset as petri_reset,
     render_animation as petri_render_animation
 )

@@ -3,14 +3,14 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "DagBi"
+name = "DaggyD"
 version = "1.0.0"
 description = "A functional framework for graph processing, workflow orchestration, and concurrent systems modeling"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "AGPL-3.0"}
 authors = [
-    {name = "DagBi Team"}
+    {name = "DaggyD Team"}
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -40,7 +40,7 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["DagBi*"]
+include = ["DaggyD*"]
 
 [tool.black]
 line-length = 100

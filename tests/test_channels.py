@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from DagBi.channels import (
+from DaggyD.channels import (
     create_last_value_channel,
     create_topic_channel,
     create_binary_operator_channel,

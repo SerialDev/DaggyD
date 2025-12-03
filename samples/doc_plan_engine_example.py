@@ -25,7 +25,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from DagBi.pregel_core import Pregel
+from DaggyD.pregel_core import Pregel
 
 
 def parse_content(raw_docs):

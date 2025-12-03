@@ -4,7 +4,7 @@ setup(
     name="DaggyD",
     version="0.1.1",
     packages=find_packages(),
-    install_requires=["DaggyD.daggyd"],
+    install_requires=["graphviz>=0.20.3"],
     python_requires=">=3.8",
     include_package_data=True,  # Force additional files into the package
 )

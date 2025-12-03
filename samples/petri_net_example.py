@@ -1,7 +1,7 @@
 """
 PETRI NET EXAMPLES
 
-This file demonstrates the Petri net capabilities of the DagBi framework:
+This file demonstrates the Petri net capabilities of the DaggyD framework:
 1. Producer-Consumer with bounded buffer
 2. Dining Philosophers (deadlock-free)
 3. Mutex with inhibitor arcs
@@ -25,7 +25,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from DagBi.petri_net import PetriNet
+from DaggyD.petri_net import PetriNet
 
 # Output directory for all generated files
 OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "example_outputs")

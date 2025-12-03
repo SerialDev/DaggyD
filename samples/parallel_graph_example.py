@@ -10,7 +10,7 @@ import os
 import time
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from DagBi.pregel_core import (
+from DaggyD.pregel_core import (
     pregel, add_channel, add_node, run, reset,
     get_checkpoint, restore_checkpoint,
     save_graphviz, save_graphviz_dataflow,
