@@ -244,9 +244,131 @@ print(net.analyze_reachability())
 
 ---
 
+### DaggyD (DAG Executor)
+
+DaggyD provides a traditional DAG execution engine with dependency resolution, error handling, and state persistence.
+
+```python
+from DagBi.main import DaggyD
+
+dag = DaggyD()
+
+# Register functions with dependencies
+@dag.add_to_registry(
+    name="fetch_data",
+    input_deps=[],
+    failure_deps=["error_handler"],
+    input_mapping={},
+)
+def fetch_data():
+    return {"data": [1, 2, 3, 4, 5]}
+
+@dag.add_to_registry(
+    name="process_data",
+    input_deps=["fetch_data"],
+    failure_deps=["error_handler"],
+    input_mapping={"fetch_data": "data"},
+)
+def process_data(data):
+    return {"result": sum(data["data"])}
+
+@dag.add_to_registry(
+    name="error_handler",
+    input_deps=[],
+    failure_deps=[],
+    input_mapping={},
+)
+def error_handler(error_step=None, error_message=None):
+    print(f"Error in {error_step}: {error_message}")
+
+# Execute from starting node
+dag.execute("fetch_data")
+```
+
+#### DaggyD Functions
+
+| Function | Description |
+|----------|-------------|
+| `DaggyD()` | Create a new DAG executor |
+| `add_function(name, func, ...)` | Register a function node |
+| `add_to_registry(...)` | Decorator for registering functions |
+| `execute(start_name, initial_outputs)` | Execute DAG from starting node |
+| `save_daggy(dag, db_path)` | Persist DAG definition to SQLite |
+| `load_daggy(db_path)` | Load DAG from SQLite |
+| `save_execution_state(dag, db_path)` | Save execution state |
+| `load_execution_state(dag, db_path)` | Resume from saved state |
+| `visualize_dag(dag)` | Print DAG structure to console |
+
+---
+
+### Hybrid Workflows (Petri Net + Pregel)
+
+DagBi's power comes from combining computation models:
+- **Petri Net**: Orchestrates workflow stages and resource management
+- **Pregel**: Executes distributed graph computations
+
+```python
+from DagBi.petri_net import petri_net, add_place, add_transition
+from DagBi.pregel_core import pregel, add_channel, add_node, run
+from DagBi.hybrid import render_hybrid_animation
+
+# Create Petri net for workflow orchestration
+net = petri_net()
+net = add_place(net, "input_ready", initial_tokens=1)
+net = add_place(net, "computing", initial_tokens=0)
+net = add_place(net, "done", initial_tokens=0)
+
+net = add_transition(net, "start_compute",
+    consume_from=[("input_ready", 1)],
+    produce_to=[("computing", 1)])
+
+net = add_transition(net, "finish_compute",
+    consume_from=[("computing", 1)],
+    produce_to=[("done", 1)])
+
+# Define Pregel computation triggered by transitions
+def create_aggregation_graph(data):
+    p = pregel()
+    p = add_channel(p, "sum", "BinaryOperator", 
+        operator=lambda a, b: a + b, initial_value=0)
+    for i, val in enumerate(data):
+        p = add_channel(p, f"val_{i}", "LastValue", initial_value=val)
+        def make_fn(v):
+            done = [False]
+            def fn(inputs):
+                if done[0]: return None
+                done[0] = True
+                return {"out": v}
+            return fn
+        p = add_node(p, f"node_{i}", make_fn(val),
+            subscribe_to=[f"val_{i}"], write_to={"out": "sum"})
+    return p
+
+# Map transitions to Pregel computations
+pregel_factories = {
+    "start_compute": (
+        lambda: create_aggregation_graph([10, 20, 30]),
+        "Aggregation"
+    )
+}
+
+# Render unified animation showing both models
+render_hybrid_animation(
+    net,
+    pregel_factories,
+    "hybrid_workflow",
+    max_steps=10,
+    title="Hybrid Pipeline"
+)
+```
+
+See `samples/hybrid_example.py` and `samples/complex_hybrid_example.py` for complete examples including parallel processing lanes with shared resources.
+
+---
+
 ### Visualization
 
-Both engines support Graphviz visualization and animated GIFs.
+All engines support Graphviz visualization and animated GIFs.
 
 ```python
 # Static export
@@ -301,9 +423,10 @@ python samples/hybrid_example.py
 | File | Description |
 |------|-------------|
 | `samples/petri_net_example.py` | 9 Petri net patterns including deadlock detection |
-| `samples/pagerank_example.py` | PageRank algorithm |
-| `samples/animated_examples.py` | 20 animated GIF examples |
+| `samples/pagerank_example.py` | PageRank algorithm using Pregel |
+| `samples/animated_examples.py` | 20+ animated GIF examples |
 | `samples/hybrid_example.py` | Combined Petri + Pregel workflows |
+| `samples/complex_hybrid_example.py` | Parallel lanes with shared resources |
 
 ### Output Directory
 
@@ -382,8 +505,8 @@ if "Deadlock-free:   No" in report:
 
 ## Acknowledgments
 
-- Based on Google's [Pregel paper](https://research.google/pubs/pub36726/)
-- Inspired by LangGraph's architecture
+- Based on Google's [Pregel paper](https://research.google/pubs/pub36726/) for BSP graph processing
+- Inspired by [Petri nets](https://en.wikipedia.org/wiki/Petri_net) for concurrent systems modeling
 
 ---
 
