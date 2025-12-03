@@ -27,12 +27,23 @@ This means:
 
 ### Installation
 
+**From GitHub (recommended):**
+
 ```bash
-git clone https://github.com/yourusername/DaggyD.git
+pip install git+https://github.com/serialdev/DaggyD.git
+```
+
+**For development:**
+
+```bash
+git clone https://github.com/serialdev/DaggyD.git
 cd DaggyD
 pip install -e .
+```
 
-# For visualization (optional)
+**For visualization (optional):**
+
+```bash
 brew install graphviz imagemagick  # macOS
 # apt install graphviz imagemagick  # Ubuntu
 ```
