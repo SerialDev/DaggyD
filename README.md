@@ -505,7 +505,7 @@ if "Deadlock-free:   No" in report:
 
 ## Acknowledgments
 
-- Based on Google's [Pregel paper](https://research.google/pubs/pub36726/) for BSP graph processing
+- Based on Google's [Pregel paper](https://15799.courses.cs.cmu.edu/fall2013/static/papers/p135-malewicz.pdf) for BSP graph processing
 - Inspired by [Petri nets](https://en.wikipedia.org/wiki/Petri_net) for concurrent systems modeling
 
 ---
