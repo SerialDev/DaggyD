@@ -1,0 +1,25 @@
+digraph ReachabilityGraph {
+    rankdir=TB;
+    node [fontname="Arial", shape=box, style=rounded];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Dining Philosophers (Deadlock) - Reachability";
+
+    // Markings
+    "M0" [label="M0 (initial)\n{fork1:1, fork2:1, phil1_eating:0, phil1_has_left:0, phil1_thinking:1, phil2_eating:0, phil2_has_left:0, phil2_thinking:1}", style=filled, fillcolor="lightblue"];
+    "M1" [label="M1\n{fork1:0, fork2:1, phil1_eating:0, phil1_has_left:1, phil1_thinking:0, phil2_eating:0, phil2_has_left:0, phil2_thinking:1}", style=filled, fillcolor="white"];
+    "M2" [label="M2\n{fork1:1, fork2:0, phil1_eating:0, phil1_has_left:0, phil1_thinking:1, phil2_eating:0, phil2_has_left:1, phil2_thinking:0}", style=filled, fillcolor="white"];
+    "M3" [label="M3\n{fork1:0, fork2:0, phil1_eating:1, phil1_has_left:0, phil1_thinking:0, phil2_eating:0, phil2_has_left:0, phil2_thinking:1}", style=filled, fillcolor="white"];
+    "M4" [label="M4 (deadlock)\n{fork1:0, fork2:0, phil1_eating:0, phil1_has_left:1, phil1_thinking:0, phil2_eating:0, phil2_has_left:1, phil2_thinking:0}", style=filled, fillcolor="lightcoral"];
+    "M5" [label="M5\n{fork1:0, fork2:0, phil1_eating:0, phil1_has_left:0, phil1_thinking:1, phil2_eating:1, phil2_has_left:0, phil2_thinking:0}", style=filled, fillcolor="white"];
+
+    // Transitions
+    "M0" -> "M1" [label="phil1_take_left"];
+    "M0" -> "M2" [label="phil2_take_left"];
+    "M1" -> "M3" [label="phil1_take_right"];
+    "M1" -> "M4" [label="phil2_take_left"];
+    "M2" -> "M4" [label="phil1_take_left"];
+    "M2" -> "M5" [label="phil2_take_right"];
+    "M3" -> "M0" [label="phil1_release"];
+    "M5" -> "M0" [label="phil2_release"];
+}

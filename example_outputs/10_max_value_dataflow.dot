@@ -1,0 +1,23 @@
+digraph PregelDataflow {
+    rankdir=LR;
+    node [fontname="Arial", shape=box, style="filled,rounded"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Maximum Value Dataflow";
+
+    // Nodes
+    "node_1" [fillcolor="lightgreen"];
+    "node_2" [fillcolor="lightgreen"];
+    "node_3" [fillcolor="lightgreen"];
+    "node_4" [fillcolor="lightgreen"];
+
+    // Dataflow edges
+    "node_2" -> "node_1" [label="messages_1"];
+    "node_3" -> "node_1" [label="messages_1"];
+    "node_1" -> "node_2" [label="messages_2"];
+    "node_4" -> "node_2" [label="messages_2"];
+    "node_1" -> "node_3" [label="messages_3"];
+    "node_4" -> "node_3" [label="messages_3"];
+    "node_2" -> "node_4" [label="messages_4"];
+    "node_3" -> "node_4" [label="messages_4"];
+}

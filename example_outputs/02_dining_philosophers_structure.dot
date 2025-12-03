@@ -1,0 +1,39 @@
+digraph PetriNet {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Dining Philosophers - Structure";
+
+    // Places
+    "fork1" [shape=circle, style=filled, fillcolor="lightblue", label="fork1\n1"];
+    "fork2" [shape=circle, style=filled, fillcolor="lightblue", label="fork2\n1"];
+    "phil1_thinking" [shape=circle, style=filled, fillcolor="lightblue", label="phil1_thinking\n1"];
+    "phil1_eating" [shape=circle, style=filled, fillcolor="white", label="phil1_eating\n0"];
+    "phil2_thinking" [shape=circle, style=filled, fillcolor="lightblue", label="phil2_thinking\n1"];
+    "phil2_eating" [shape=circle, style=filled, fillcolor="white", label="phil2_eating\n0"];
+
+    // Transitions
+    "phil1_pickup" [shape=box, style=filled, fillcolor="lightgreen", label="phil1_pickup"];
+    "phil1_putdown" [shape=box, style=filled, fillcolor="lightgray", label="phil1_putdown"];
+    "phil2_pickup" [shape=box, style=filled, fillcolor="lightgreen", label="phil2_pickup"];
+    "phil2_putdown" [shape=box, style=filled, fillcolor="lightgray", label="phil2_putdown"];
+
+    // Arcs
+    "phil1_thinking" -> "phil1_pickup";
+    "fork1" -> "phil1_pickup";
+    "fork2" -> "phil1_pickup";
+    "phil1_pickup" -> "phil1_eating";
+    "phil1_eating" -> "phil1_putdown";
+    "phil1_putdown" -> "phil1_thinking";
+    "phil1_putdown" -> "fork1";
+    "phil1_putdown" -> "fork2";
+    "phil2_thinking" -> "phil2_pickup";
+    "fork1" -> "phil2_pickup";
+    "fork2" -> "phil2_pickup";
+    "phil2_pickup" -> "phil2_eating";
+    "phil2_eating" -> "phil2_putdown";
+    "phil2_putdown" -> "phil2_thinking";
+    "phil2_putdown" -> "fork1";
+    "phil2_putdown" -> "fork2";
+}

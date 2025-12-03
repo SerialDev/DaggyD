@@ -1,0 +1,20 @@
+digraph PetriNet {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Weighted Arcs (Chemical Reaction) - Structure";
+
+    // Places
+    "H2" [shape=circle, style=filled, fillcolor="lightblue", label="H2\n6"];
+    "O2" [shape=circle, style=filled, fillcolor="lightblue", label="O2\n3"];
+    "H2O" [shape=circle, style=filled, fillcolor="white", label="H2O\n0"];
+
+    // Transitions
+    "react" [shape=box, style=filled, fillcolor="lightgreen", label="react"];
+
+    // Arcs
+    "H2" -> "react" [label="2"];
+    "O2" -> "react";
+    "react" -> "H2O" [label="2"];
+}

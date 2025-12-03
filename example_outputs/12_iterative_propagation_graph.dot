@@ -1,0 +1,30 @@
+digraph PregelGraph {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Iterative Propagation Graph";
+
+    // Channels
+    "ch_node_a_val" [shape=ellipse, style=filled, fillcolor="lightblue", label="node_a_val\n[LastValue]\n59"];
+    "ch_node_b_val" [shape=ellipse, style=filled, fillcolor="lightblue", label="node_b_val\n[LastValue]\n93"];
+    "ch_node_c_val" [shape=ellipse, style=filled, fillcolor="lightblue", label="node_c_val\n[LastValue]\n186"];
+    "ch_iteration_count" [shape=ellipse, style=filled, fillcolor="lightgreen", label="iteration_count\n[BinaryOperator]\n8"];
+
+    // Nodes
+    "node_node_a" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="node_a\n(succeeded)"];
+    "node_node_b" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="node_b\n(succeeded)"];
+    "node_node_c" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="node_c\n(succeeded)"];
+
+    // Subscriptions (channel -> node)
+    "ch_node_a_val" -> "node_node_a" [style=dashed, color=blue];
+    "ch_node_c_val" -> "node_node_a" [style=dashed, color=blue];
+    "ch_node_b_val" -> "node_node_b" [style=dashed, color=blue];
+    "ch_node_c_val" -> "node_node_c" [style=dashed, color=blue];
+
+    // Writes (node -> channel)
+    "node_node_a" -> "ch_node_b_val" [label="out", color=green];
+    "node_node_a" -> "ch_iteration_count" [label="iter", color=green];
+    "node_node_b" -> "ch_node_c_val" [label="out", color=green];
+    "node_node_c" -> "ch_node_a_val" [label="out", color=green];
+}

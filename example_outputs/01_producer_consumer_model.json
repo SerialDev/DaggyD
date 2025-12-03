@@ -1,0 +1,55 @@
+{
+  "places": {
+    "buffer": {
+      "tokens": 0,
+      "capacity": 3,
+      "initial_tokens": 0
+    },
+    "empty_slots": {
+      "tokens": 3,
+      "capacity": 3,
+      "initial_tokens": 3
+    }
+  },
+  "transitions": {
+    "produce": {
+      "consume_from": [
+        [
+          "empty_slots",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "buffer",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 12
+    },
+    "consume": {
+      "consume_from": [
+        [
+          "buffer",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "empty_slots",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 12
+    }
+  },
+  "step": 0,
+  "marking": {
+    "buffer": 0,
+    "empty_slots": 3
+  }
+}

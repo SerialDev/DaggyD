@@ -1,0 +1,21 @@
+digraph PetriNet {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Producer-Consumer - Structure";
+
+    // Places
+    "buffer" [shape=circle, style=filled, fillcolor="white", label="buffer\n0/3"];
+    "empty_slots" [shape=circle, style=filled, fillcolor="lightcoral", label="empty_slots\n3/3"];
+
+    // Transitions
+    "produce" [shape=box, style=filled, fillcolor="lightgreen", label="produce"];
+    "consume" [shape=box, style=filled, fillcolor="lightgray", label="consume"];
+
+    // Arcs
+    "empty_slots" -> "produce";
+    "produce" -> "buffer";
+    "buffer" -> "consume";
+    "consume" -> "empty_slots";
+}

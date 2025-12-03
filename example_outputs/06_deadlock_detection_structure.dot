@@ -1,0 +1,22 @@
+digraph PetriNet {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Deadlock Detection - Structure";
+
+    // Places
+    "p1" [shape=circle, style=filled, fillcolor="lightblue", label="p1\n1"];
+    "p2" [shape=circle, style=filled, fillcolor="white", label="p2\n0"];
+    "p3" [shape=circle, style=filled, fillcolor="white", label="p3\n0"];
+
+    // Transitions
+    "t1" [shape=box, style=filled, fillcolor="lightgreen", label="t1"];
+    "t2" [shape=box, style=filled, fillcolor="lightgray", label="t2"];
+
+    // Arcs
+    "p1" -> "t1";
+    "t1" -> "p2";
+    "p2" -> "t2";
+    "t2" -> "p3";
+}

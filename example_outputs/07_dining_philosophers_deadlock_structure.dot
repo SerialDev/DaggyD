@@ -1,0 +1,47 @@
+digraph PetriNet {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Dining Philosophers (Deadlock) - Structure";
+
+    // Places
+    "fork1" [shape=circle, style=filled, fillcolor="lightblue", label="fork1\n1"];
+    "fork2" [shape=circle, style=filled, fillcolor="lightblue", label="fork2\n1"];
+    "phil1_thinking" [shape=circle, style=filled, fillcolor="lightblue", label="phil1_thinking\n1"];
+    "phil1_has_left" [shape=circle, style=filled, fillcolor="white", label="phil1_has_left\n0"];
+    "phil1_eating" [shape=circle, style=filled, fillcolor="white", label="phil1_eating\n0"];
+    "phil2_thinking" [shape=circle, style=filled, fillcolor="lightblue", label="phil2_thinking\n1"];
+    "phil2_has_left" [shape=circle, style=filled, fillcolor="white", label="phil2_has_left\n0"];
+    "phil2_eating" [shape=circle, style=filled, fillcolor="white", label="phil2_eating\n0"];
+
+    // Transitions
+    "phil1_take_left" [shape=box, style=filled, fillcolor="lightgreen", label="phil1_take_left"];
+    "phil1_take_right" [shape=box, style=filled, fillcolor="lightgray", label="phil1_take_right"];
+    "phil1_release" [shape=box, style=filled, fillcolor="lightgray", label="phil1_release"];
+    "phil2_take_left" [shape=box, style=filled, fillcolor="lightgreen", label="phil2_take_left"];
+    "phil2_take_right" [shape=box, style=filled, fillcolor="lightgray", label="phil2_take_right"];
+    "phil2_release" [shape=box, style=filled, fillcolor="lightgray", label="phil2_release"];
+
+    // Arcs
+    "phil1_thinking" -> "phil1_take_left";
+    "fork1" -> "phil1_take_left";
+    "phil1_take_left" -> "phil1_has_left";
+    "phil1_has_left" -> "phil1_take_right";
+    "fork2" -> "phil1_take_right";
+    "phil1_take_right" -> "phil1_eating";
+    "phil1_eating" -> "phil1_release";
+    "phil1_release" -> "phil1_thinking";
+    "phil1_release" -> "fork1";
+    "phil1_release" -> "fork2";
+    "phil2_thinking" -> "phil2_take_left";
+    "fork2" -> "phil2_take_left";
+    "phil2_take_left" -> "phil2_has_left";
+    "phil2_has_left" -> "phil2_take_right";
+    "fork1" -> "phil2_take_right";
+    "phil2_take_right" -> "phil2_eating";
+    "phil2_eating" -> "phil2_release";
+    "phil2_release" -> "phil2_thinking";
+    "phil2_release" -> "fork1";
+    "phil2_release" -> "fork2";
+}

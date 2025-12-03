@@ -1,0 +1,33 @@
+digraph PetriNet {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Fork-Join Workflow - Structure";
+
+    // Places
+    "start" [shape=circle, style=filled, fillcolor="lightblue", label="start\n1"];
+    "branch_a" [shape=circle, style=filled, fillcolor="white", label="branch_a\n0"];
+    "branch_b" [shape=circle, style=filled, fillcolor="white", label="branch_b\n0"];
+    "done_a" [shape=circle, style=filled, fillcolor="white", label="done_a\n0"];
+    "done_b" [shape=circle, style=filled, fillcolor="white", label="done_b\n0"];
+    "end" [shape=circle, style=filled, fillcolor="white", label="end\n0"];
+
+    // Transitions
+    "fork" [shape=box, style=filled, fillcolor="lightgreen", label="fork"];
+    "process_a" [shape=box, style=filled, fillcolor="lightgray", label="process_a"];
+    "process_b" [shape=box, style=filled, fillcolor="lightgray", label="process_b"];
+    "join" [shape=box, style=filled, fillcolor="lightgray", label="join"];
+
+    // Arcs
+    "start" -> "fork";
+    "fork" -> "branch_a";
+    "fork" -> "branch_b";
+    "branch_a" -> "process_a";
+    "process_a" -> "done_a";
+    "branch_b" -> "process_b";
+    "process_b" -> "done_b";
+    "done_a" -> "join";
+    "done_b" -> "join";
+    "join" -> "end";
+}

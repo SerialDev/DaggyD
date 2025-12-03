@@ -1,0 +1,61 @@
+{
+  "places": {
+    "resource": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "low_got_it": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    },
+    "high_got_it": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    }
+  },
+  "transitions": {
+    "low_priority": {
+      "consume_from": [
+        [
+          "resource",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "low_got_it",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 1,
+      "fire_count": 4
+    },
+    "high_priority": {
+      "consume_from": [
+        [
+          "resource",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "high_got_it",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 10,
+      "fire_count": 4
+    }
+  },
+  "step": 0,
+  "marking": {
+    "resource": 1,
+    "low_got_it": 0,
+    "high_got_it": 0
+  }
+}

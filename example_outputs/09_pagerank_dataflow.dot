@@ -1,0 +1,33 @@
+digraph PregelDataflow {
+    rankdir=LR;
+    node [fontname="Arial", shape=box, style="filled,rounded"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="PageRank Dataflow";
+
+    // Nodes
+    "vertex_A" [fillcolor="lightgreen"];
+    "vertex_B" [fillcolor="lightgreen"];
+    "vertex_C" [fillcolor="lightgreen"];
+    "vertex_D" [fillcolor="lightgreen"];
+    "vertex_E" [fillcolor="lightgreen"];
+    "vertex_F" [fillcolor="lightgreen"];
+
+    // Dataflow edges
+    "vertex_A" -> "vertex_A" [label="rank_A"];
+    "vertex_C" -> "vertex_A" [label="inbox_A"];
+    "vertex_E" -> "vertex_A" [label="inbox_A"];
+    "vertex_F" -> "vertex_A" [label="inbox_A"];
+    "vertex_B" -> "vertex_B" [label="rank_B"];
+    "vertex_A" -> "vertex_B" [label="inbox_B"];
+    "vertex_C" -> "vertex_C" [label="rank_C"];
+    "vertex_A" -> "vertex_C" [label="inbox_C"];
+    "vertex_B" -> "vertex_C" [label="inbox_C"];
+    "vertex_D" -> "vertex_D" [label="rank_D"];
+    "vertex_B" -> "vertex_D" [label="inbox_D"];
+    "vertex_C" -> "vertex_D" [label="inbox_D"];
+    "vertex_E" -> "vertex_E" [label="rank_E"];
+    "vertex_D" -> "vertex_E" [label="inbox_E"];
+    "vertex_F" -> "vertex_F" [label="rank_F"];
+    "vertex_E" -> "vertex_F" [label="inbox_F"];
+}

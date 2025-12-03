@@ -1,0 +1,64 @@
+digraph PetriNet {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Resource Pool - Structure";
+
+    // Places
+    "pool" [shape=circle, style=filled, fillcolor="lightcoral", label="pool\n3/3"];
+    "worker0_idle" [shape=circle, style=filled, fillcolor="lightblue", label="worker0_idle\n1"];
+    "worker0_working" [shape=circle, style=filled, fillcolor="white", label="worker0_working\n0"];
+    "worker1_idle" [shape=circle, style=filled, fillcolor="lightblue", label="worker1_idle\n1"];
+    "worker1_working" [shape=circle, style=filled, fillcolor="white", label="worker1_working\n0"];
+    "worker2_idle" [shape=circle, style=filled, fillcolor="lightblue", label="worker2_idle\n1"];
+    "worker2_working" [shape=circle, style=filled, fillcolor="white", label="worker2_working\n0"];
+    "worker3_idle" [shape=circle, style=filled, fillcolor="lightblue", label="worker3_idle\n1"];
+    "worker3_working" [shape=circle, style=filled, fillcolor="white", label="worker3_working\n0"];
+    "worker4_idle" [shape=circle, style=filled, fillcolor="lightblue", label="worker4_idle\n1"];
+    "worker4_working" [shape=circle, style=filled, fillcolor="white", label="worker4_working\n0"];
+
+    // Transitions
+    "worker0_start" [shape=box, style=filled, fillcolor="lightgreen", label="worker0_start"];
+    "worker0_finish" [shape=box, style=filled, fillcolor="lightgray", label="worker0_finish"];
+    "worker1_start" [shape=box, style=filled, fillcolor="lightgreen", label="worker1_start"];
+    "worker1_finish" [shape=box, style=filled, fillcolor="lightgray", label="worker1_finish"];
+    "worker2_start" [shape=box, style=filled, fillcolor="lightgreen", label="worker2_start"];
+    "worker2_finish" [shape=box, style=filled, fillcolor="lightgray", label="worker2_finish"];
+    "worker3_start" [shape=box, style=filled, fillcolor="lightgreen", label="worker3_start"];
+    "worker3_finish" [shape=box, style=filled, fillcolor="lightgray", label="worker3_finish"];
+    "worker4_start" [shape=box, style=filled, fillcolor="lightgreen", label="worker4_start"];
+    "worker4_finish" [shape=box, style=filled, fillcolor="lightgray", label="worker4_finish"];
+
+    // Arcs
+    "worker0_idle" -> "worker0_start";
+    "pool" -> "worker0_start";
+    "worker0_start" -> "worker0_working";
+    "worker0_working" -> "worker0_finish";
+    "worker0_finish" -> "worker0_idle";
+    "worker0_finish" -> "pool";
+    "worker1_idle" -> "worker1_start";
+    "pool" -> "worker1_start";
+    "worker1_start" -> "worker1_working";
+    "worker1_working" -> "worker1_finish";
+    "worker1_finish" -> "worker1_idle";
+    "worker1_finish" -> "pool";
+    "worker2_idle" -> "worker2_start";
+    "pool" -> "worker2_start";
+    "worker2_start" -> "worker2_working";
+    "worker2_working" -> "worker2_finish";
+    "worker2_finish" -> "worker2_idle";
+    "worker2_finish" -> "pool";
+    "worker3_idle" -> "worker3_start";
+    "pool" -> "worker3_start";
+    "worker3_start" -> "worker3_working";
+    "worker3_working" -> "worker3_finish";
+    "worker3_finish" -> "worker3_idle";
+    "worker3_finish" -> "pool";
+    "worker4_idle" -> "worker4_start";
+    "pool" -> "worker4_start";
+    "worker4_start" -> "worker4_working";
+    "worker4_working" -> "worker4_finish";
+    "worker4_finish" -> "worker4_idle";
+    "worker4_finish" -> "pool";
+}

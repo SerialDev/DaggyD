@@ -1,0 +1,18 @@
+digraph PregelDataflow {
+    rankdir=LR;
+    node [fontname="Arial", shape=box, style="filled,rounded"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Iterative Propagation Dataflow";
+
+    // Nodes
+    "node_a" [fillcolor="lightgreen"];
+    "node_b" [fillcolor="lightgreen"];
+    "node_c" [fillcolor="lightgreen"];
+
+    // Dataflow edges
+    "node_c" -> "node_a" [label="node_a_val"];
+    "node_b" -> "node_a" [label="node_c_val"];
+    "node_a" -> "node_b" [label="node_b_val"];
+    "node_b" -> "node_c" [label="node_c_val"];
+}

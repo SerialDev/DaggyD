@@ -1,0 +1,37 @@
+============================================================
+PETRI NET REACHABILITY ANALYSIS
+============================================================
+
+SUMMARY
+----------------------------------------
+  Places:          2
+  Transitions:     2
+  Reachable states: 4
+  Edges:           6
+  Analysis complete: Yes
+
+PROPERTIES
+----------------------------------------
+  Bounded:         Yes
+  Deadlock-free:   Yes
+
+PLACE BOUNDS
+----------------------------------------
+  buffer: max=3, capacity=3
+  empty_slots: max=3, capacity=3
+
+INITIAL MARKING
+----------------------------------------
+  buffer: 0
+  empty_slots: 3
+
+TRANSITION INFO
+----------------------------------------
+  consume:
+    Input arcs:  {buffer:1}
+    Output arcs: {empty_slots:1}
+  produce:
+    Input arcs:  {empty_slots:1}
+    Output arcs: {buffer:1}
+
+============================================================

@@ -1,0 +1,48 @@
+digraph PregelGraph {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Maximum Value Graph";
+
+    // Channels
+    "ch_vertex_1" [shape=ellipse, style=filled, fillcolor="lightblue", label="vertex_1\n[LastValue]\n3"];
+    "ch_vertex_2" [shape=ellipse, style=filled, fillcolor="lightblue", label="vertex_2\n[LastValue]\n6"];
+    "ch_vertex_3" [shape=ellipse, style=filled, fillcolor="lightblue", label="vertex_3\n[LastValue]\n2"];
+    "ch_vertex_4" [shape=ellipse, style=filled, fillcolor="lightblue", label="vertex_4\n[LastValue]\n1"];
+    "ch_messages_1" [shape=ellipse, style=filled, fillcolor="lightyellow", label="messages_1\n[Topic]\n[6, 2, 3, 6, 6, 6, 6, 6, 6, 6,..."];
+    "ch_messages_2" [shape=ellipse, style=filled, fillcolor="lightyellow", label="messages_2\n[Topic]\n[3, 1, 6, 6, 6, 6, 6, 6, 6, 6,..."];
+    "ch_messages_3" [shape=ellipse, style=filled, fillcolor="lightyellow", label="messages_3\n[Topic]\n[3, 1, 6, 6, 6, 6, 6, 6, 6, 6,..."];
+    "ch_messages_4" [shape=ellipse, style=filled, fillcolor="lightyellow", label="messages_4\n[Topic]\n[6, 2, 3, 6, 6, 6, 6, 6, 6, 6,..."];
+    "ch_global_max" [shape=ellipse, style=filled, fillcolor="lightgreen", label="global_max\n[BinaryOperator]\n6"];
+
+    // Nodes
+    "node_node_1" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="node_1\n(succeeded)"];
+    "node_node_2" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="node_2\n(succeeded)"];
+    "node_node_3" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="node_3\n(succeeded)"];
+    "node_node_4" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="node_4\n(succeeded)"];
+
+    // Subscriptions (channel -> node)
+    "ch_vertex_1" -> "node_node_1" [style=dashed, color=blue];
+    "ch_messages_1" -> "node_node_1" [style=dashed, color=blue];
+    "ch_vertex_2" -> "node_node_2" [style=dashed, color=blue];
+    "ch_messages_2" -> "node_node_2" [style=dashed, color=blue];
+    "ch_vertex_3" -> "node_node_3" [style=dashed, color=blue];
+    "ch_messages_3" -> "node_node_3" [style=dashed, color=blue];
+    "ch_vertex_4" -> "node_node_4" [style=dashed, color=blue];
+    "ch_messages_4" -> "node_node_4" [style=dashed, color=blue];
+
+    // Writes (node -> channel)
+    "node_node_1" -> "ch_messages_2" [label="msg_2", color=green];
+    "node_node_1" -> "ch_messages_3" [label="msg_3", color=green];
+    "node_node_1" -> "ch_global_max" [label="gmax", color=green];
+    "node_node_2" -> "ch_messages_1" [label="msg_1", color=green];
+    "node_node_2" -> "ch_messages_4" [label="msg_4", color=green];
+    "node_node_2" -> "ch_global_max" [label="gmax", color=green];
+    "node_node_3" -> "ch_messages_1" [label="msg_1", color=green];
+    "node_node_3" -> "ch_messages_4" [label="msg_4", color=green];
+    "node_node_3" -> "ch_global_max" [label="gmax", color=green];
+    "node_node_4" -> "ch_messages_2" [label="msg_2", color=green];
+    "node_node_4" -> "ch_messages_3" [label="msg_3", color=green];
+    "node_node_4" -> "ch_global_max" [label="gmax", color=green];
+}

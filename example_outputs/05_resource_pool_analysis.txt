@@ -1,0 +1,79 @@
+============================================================
+PETRI NET REACHABILITY ANALYSIS
+============================================================
+
+SUMMARY
+----------------------------------------
+  Places:          11
+  Transitions:     10
+  Reachable states: 26
+  Edges:           110
+  Analysis complete: Yes
+
+PROPERTIES
+----------------------------------------
+  Bounded:         Yes
+  Deadlock-free:   Yes
+
+PLACE BOUNDS
+----------------------------------------
+  pool: max=3, capacity=3
+  worker0_idle: max=1, capacity=inf
+  worker0_working: max=1, capacity=inf
+  worker1_idle: max=1, capacity=inf
+  worker1_working: max=1, capacity=inf
+  worker2_idle: max=1, capacity=inf
+  worker2_working: max=1, capacity=inf
+  worker3_idle: max=1, capacity=inf
+  worker3_working: max=1, capacity=inf
+  worker4_idle: max=1, capacity=inf
+  worker4_working: max=1, capacity=inf
+
+INITIAL MARKING
+----------------------------------------
+  pool: 3
+  worker0_idle: 1
+  worker0_working: 0
+  worker1_idle: 1
+  worker1_working: 0
+  worker2_idle: 1
+  worker2_working: 0
+  worker3_idle: 1
+  worker3_working: 0
+  worker4_idle: 1
+  worker4_working: 0
+
+TRANSITION INFO
+----------------------------------------
+  worker0_finish:
+    Input arcs:  {worker0_working:1}
+    Output arcs: {worker0_idle:1, pool:1}
+  worker0_start:
+    Input arcs:  {worker0_idle:1, pool:1}
+    Output arcs: {worker0_working:1}
+  worker1_finish:
+    Input arcs:  {worker1_working:1}
+    Output arcs: {worker1_idle:1, pool:1}
+  worker1_start:
+    Input arcs:  {worker1_idle:1, pool:1}
+    Output arcs: {worker1_working:1}
+  worker2_finish:
+    Input arcs:  {worker2_working:1}
+    Output arcs: {worker2_idle:1, pool:1}
+  worker2_start:
+    Input arcs:  {worker2_idle:1, pool:1}
+    Output arcs: {worker2_working:1}
+  worker3_finish:
+    Input arcs:  {worker3_working:1}
+    Output arcs: {worker3_idle:1, pool:1}
+  worker3_start:
+    Input arcs:  {worker3_idle:1, pool:1}
+    Output arcs: {worker3_working:1}
+  worker4_finish:
+    Input arcs:  {worker4_working:1}
+    Output arcs: {worker4_idle:1, pool:1}
+  worker4_start:
+    Input arcs:  {worker4_idle:1, pool:1}
+    Output arcs: {worker4_working:1}
+
+============================================================

@@ -1,0 +1,18 @@
+digraph ReachabilityGraph {
+    rankdir=TB;
+    node [fontname="Arial", shape=box, style=rounded];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Dining Philosophers - Reachability";
+
+    // Markings
+    "M0" [label="M0 (initial)\n{fork1:1, fork2:1, phil1_eating:0, phil1_thinking:1, phil2_eating:0, phil2_thinking:1}", style=filled, fillcolor="lightblue"];
+    "M1" [label="M1\n{fork1:0, fork2:0, phil1_eating:1, phil1_thinking:0, phil2_eating:0, phil2_thinking:1}", style=filled, fillcolor="white"];
+    "M2" [label="M2\n{fork1:0, fork2:0, phil1_eating:0, phil1_thinking:1, phil2_eating:1, phil2_thinking:0}", style=filled, fillcolor="white"];
+
+    // Transitions
+    "M0" -> "M1" [label="phil1_pickup"];
+    "M0" -> "M2" [label="phil2_pickup"];
+    "M1" -> "M0" [label="phil1_putdown"];
+    "M2" -> "M0" [label="phil2_putdown"];
+}

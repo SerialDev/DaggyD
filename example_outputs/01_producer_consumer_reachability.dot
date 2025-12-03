@@ -1,0 +1,21 @@
+digraph ReachabilityGraph {
+    rankdir=TB;
+    node [fontname="Arial", shape=box, style=rounded];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Producer-Consumer - Reachability";
+
+    // Markings
+    "M0" [label="M0 (initial)\n{buffer:0, empty_slots:3}", style=filled, fillcolor="lightblue"];
+    "M1" [label="M1\n{buffer:1, empty_slots:2}", style=filled, fillcolor="white"];
+    "M2" [label="M2\n{buffer:2, empty_slots:1}", style=filled, fillcolor="white"];
+    "M3" [label="M3\n{buffer:3, empty_slots:0}", style=filled, fillcolor="white"];
+
+    // Transitions
+    "M0" -> "M1" [label="produce"];
+    "M1" -> "M0" [label="consume"];
+    "M1" -> "M2" [label="produce"];
+    "M2" -> "M1" [label="consume"];
+    "M2" -> "M3" [label="produce"];
+    "M3" -> "M2" [label="consume"];
+}

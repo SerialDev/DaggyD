@@ -1,0 +1,22 @@
+digraph PetriNet {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Transition Priorities - Structure";
+
+    // Places
+    "resource" [shape=circle, style=filled, fillcolor="lightblue", label="resource\n1"];
+    "low_got_it" [shape=circle, style=filled, fillcolor="white", label="low_got_it\n0"];
+    "high_got_it" [shape=circle, style=filled, fillcolor="white", label="high_got_it\n0"];
+
+    // Transitions
+    "low_priority" [shape=box, style=filled, fillcolor="lightgreen", label="low_priority"];
+    "high_priority" [shape=box, style=filled, fillcolor="lightgreen", label="high_priority"];
+
+    // Arcs
+    "resource" -> "low_priority";
+    "low_priority" -> "low_got_it";
+    "resource" -> "high_priority";
+    "high_priority" -> "high_got_it";
+}

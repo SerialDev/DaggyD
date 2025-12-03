@@ -1,0 +1,18 @@
+digraph ReachabilityGraph {
+    rankdir=TB;
+    node [fontname="Arial", shape=box, style=rounded];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Weighted Arcs (Chemical Reaction) - Reachability";
+
+    // Markings
+    "M0" [label="M0 (initial)\n{H2:6, H2O:0, O2:3}", style=filled, fillcolor="lightblue"];
+    "M1" [label="M1\n{H2:4, H2O:2, O2:2}", style=filled, fillcolor="white"];
+    "M2" [label="M2\n{H2:2, H2O:4, O2:1}", style=filled, fillcolor="white"];
+    "M3" [label="M3 (deadlock)\n{H2:0, H2O:6, O2:0}", style=filled, fillcolor="lightcoral"];
+
+    // Transitions
+    "M0" -> "M1" [label="react"];
+    "M1" -> "M2" [label="react"];
+    "M2" -> "M3" [label="react"];
+}

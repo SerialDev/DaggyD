@@ -1,0 +1,51 @@
+============================================================
+PETRI NET REACHABILITY ANALYSIS
+============================================================
+
+SUMMARY
+----------------------------------------
+  Places:          5
+  Transitions:     4
+  Reachable states: 3
+  Edges:           4
+  Analysis complete: Yes
+
+PROPERTIES
+----------------------------------------
+  Bounded:         Yes
+  Deadlock-free:   Yes
+
+PLACE BOUNDS
+----------------------------------------
+  p1_idle: max=1, capacity=inf
+  p1_using: max=1, capacity=inf
+  p2_idle: max=1, capacity=inf
+  p2_using: max=1, capacity=inf
+  resource: max=1, capacity=inf
+
+INITIAL MARKING
+----------------------------------------
+  p1_idle: 1
+  p1_using: 0
+  p2_idle: 1
+  p2_using: 0
+  resource: 1
+
+TRANSITION INFO
+----------------------------------------
+  p1_acquire:
+    Input arcs:  {p1_idle:1, resource:1}
+    Output arcs: {p1_using:1}
+    Inhibitors:  {p2_using}
+  p1_release:
+    Input arcs:  {p1_using:1}
+    Output arcs: {p1_idle:1, resource:1}
+  p2_acquire:
+    Input arcs:  {p2_idle:1, resource:1}
+    Output arcs: {p2_using:1}
+    Inhibitors:  {p1_using}
+  p2_release:
+    Input arcs:  {p2_using:1}
+    Output arcs: {p2_idle:1, resource:1}
+
+============================================================

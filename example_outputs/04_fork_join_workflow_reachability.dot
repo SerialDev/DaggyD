@@ -1,0 +1,23 @@
+digraph ReachabilityGraph {
+    rankdir=TB;
+    node [fontname="Arial", shape=box, style=rounded];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Fork-Join Workflow - Reachability";
+
+    // Markings
+    "M0" [label="M0 (initial)\n{branch_a:0, branch_b:0, done_a:0, done_b:0, end:0, start:1}", style=filled, fillcolor="lightblue"];
+    "M1" [label="M1\n{branch_a:1, branch_b:1, done_a:0, done_b:0, end:0, start:0}", style=filled, fillcolor="white"];
+    "M2" [label="M2\n{branch_a:0, branch_b:1, done_a:1, done_b:0, end:0, start:0}", style=filled, fillcolor="white"];
+    "M3" [label="M3\n{branch_a:1, branch_b:0, done_a:0, done_b:1, end:0, start:0}", style=filled, fillcolor="white"];
+    "M4" [label="M4\n{branch_a:0, branch_b:0, done_a:1, done_b:1, end:0, start:0}", style=filled, fillcolor="white"];
+    "M5" [label="M5 (deadlock)\n{branch_a:0, branch_b:0, done_a:0, done_b:0, end:1, start:0}", style=filled, fillcolor="lightcoral"];
+
+    // Transitions
+    "M0" -> "M1" [label="fork"];
+    "M1" -> "M2" [label="process_a"];
+    "M1" -> "M3" [label="process_b"];
+    "M2" -> "M4" [label="process_b"];
+    "M3" -> "M4" [label="process_a"];
+    "M4" -> "M5" [label="join"];
+}

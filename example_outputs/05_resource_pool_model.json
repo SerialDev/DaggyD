@@ -1,0 +1,285 @@
+{
+  "places": {
+    "pool": {
+      "tokens": 3,
+      "capacity": 3,
+      "initial_tokens": 3
+    },
+    "worker0_idle": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "worker0_working": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    },
+    "worker1_idle": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "worker1_working": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    },
+    "worker2_idle": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "worker2_working": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    },
+    "worker3_idle": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "worker3_working": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    },
+    "worker4_idle": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "worker4_working": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    }
+  },
+  "transitions": {
+    "worker0_start": {
+      "consume_from": [
+        [
+          "worker0_idle",
+          1
+        ],
+        [
+          "pool",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "worker0_working",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 44
+    },
+    "worker0_finish": {
+      "consume_from": [
+        [
+          "worker0_working",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "worker0_idle",
+          1
+        ],
+        [
+          "pool",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 44
+    },
+    "worker1_start": {
+      "consume_from": [
+        [
+          "worker1_idle",
+          1
+        ],
+        [
+          "pool",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "worker1_working",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 44
+    },
+    "worker1_finish": {
+      "consume_from": [
+        [
+          "worker1_working",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "worker1_idle",
+          1
+        ],
+        [
+          "pool",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 44
+    },
+    "worker2_start": {
+      "consume_from": [
+        [
+          "worker2_idle",
+          1
+        ],
+        [
+          "pool",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "worker2_working",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 44
+    },
+    "worker2_finish": {
+      "consume_from": [
+        [
+          "worker2_working",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "worker2_idle",
+          1
+        ],
+        [
+          "pool",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 44
+    },
+    "worker3_start": {
+      "consume_from": [
+        [
+          "worker3_idle",
+          1
+        ],
+        [
+          "pool",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "worker3_working",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 44
+    },
+    "worker3_finish": {
+      "consume_from": [
+        [
+          "worker3_working",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "worker3_idle",
+          1
+        ],
+        [
+          "pool",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 44
+    },
+    "worker4_start": {
+      "consume_from": [
+        [
+          "worker4_idle",
+          1
+        ],
+        [
+          "pool",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "worker4_working",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 44
+    },
+    "worker4_finish": {
+      "consume_from": [
+        [
+          "worker4_working",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "worker4_idle",
+          1
+        ],
+        [
+          "pool",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 44
+    }
+  },
+  "step": 0,
+  "marking": {
+    "pool": 3,
+    "worker0_idle": 1,
+    "worker0_working": 0,
+    "worker1_idle": 1,
+    "worker1_working": 0,
+    "worker2_idle": 1,
+    "worker2_working": 0,
+    "worker3_idle": 1,
+    "worker3_working": 0,
+    "worker4_idle": 1,
+    "worker4_working": 0
+  }
+}

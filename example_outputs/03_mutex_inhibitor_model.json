@@ -1,0 +1,127 @@
+{
+  "places": {
+    "resource": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "p1_idle": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "p1_using": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    },
+    "p2_idle": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "p2_using": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    }
+  },
+  "transitions": {
+    "p1_acquire": {
+      "consume_from": [
+        [
+          "p1_idle",
+          1
+        ],
+        [
+          "resource",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "p1_using",
+          1
+        ]
+      ],
+      "inhibitor_from": [
+        "p2_using"
+      ],
+      "priority": 0,
+      "fire_count": 4
+    },
+    "p1_release": {
+      "consume_from": [
+        [
+          "p1_using",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "p1_idle",
+          1
+        ],
+        [
+          "resource",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 4
+    },
+    "p2_acquire": {
+      "consume_from": [
+        [
+          "p2_idle",
+          1
+        ],
+        [
+          "resource",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "p2_using",
+          1
+        ]
+      ],
+      "inhibitor_from": [
+        "p1_using"
+      ],
+      "priority": 0,
+      "fire_count": 4
+    },
+    "p2_release": {
+      "consume_from": [
+        [
+          "p2_using",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "p2_idle",
+          1
+        ],
+        [
+          "resource",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 4
+    }
+  },
+  "step": 0,
+  "marking": {
+    "resource": 1,
+    "p1_idle": 1,
+    "p1_using": 0,
+    "p2_idle": 1,
+    "p2_using": 0
+  }
+}

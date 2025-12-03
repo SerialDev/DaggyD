@@ -1,0 +1,16 @@
+digraph ReachabilityGraph {
+    rankdir=TB;
+    node [fontname="Arial", shape=box, style=rounded];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Transition Priorities - Reachability";
+
+    // Markings
+    "M0" [label="M0 (initial)\n{high_got_it:0, low_got_it:0, resource:1}", style=filled, fillcolor="lightblue"];
+    "M1" [label="M1 (deadlock)\n{high_got_it:1, low_got_it:0, resource:0}", style=filled, fillcolor="lightcoral"];
+    "M2" [label="M2 (deadlock)\n{high_got_it:0, low_got_it:1, resource:0}", style=filled, fillcolor="lightcoral"];
+
+    // Transitions
+    "M0" -> "M1" [label="high_priority"];
+    "M0" -> "M2" [label="low_priority"];
+}

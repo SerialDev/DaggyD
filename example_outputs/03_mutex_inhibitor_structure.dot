@@ -1,0 +1,36 @@
+digraph PetriNet {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Mutex with Inhibitor Arcs - Structure";
+
+    // Places
+    "resource" [shape=circle, style=filled, fillcolor="lightblue", label="resource\n1"];
+    "p1_idle" [shape=circle, style=filled, fillcolor="lightblue", label="p1_idle\n1"];
+    "p1_using" [shape=circle, style=filled, fillcolor="white", label="p1_using\n0"];
+    "p2_idle" [shape=circle, style=filled, fillcolor="lightblue", label="p2_idle\n1"];
+    "p2_using" [shape=circle, style=filled, fillcolor="white", label="p2_using\n0"];
+
+    // Transitions
+    "p1_acquire" [shape=box, style=filled, fillcolor="lightgreen", label="p1_acquire"];
+    "p1_release" [shape=box, style=filled, fillcolor="lightgray", label="p1_release"];
+    "p2_acquire" [shape=box, style=filled, fillcolor="lightgreen", label="p2_acquire"];
+    "p2_release" [shape=box, style=filled, fillcolor="lightgray", label="p2_release"];
+
+    // Arcs
+    "p1_idle" -> "p1_acquire";
+    "resource" -> "p1_acquire";
+    "p1_acquire" -> "p1_using";
+    "p2_using" -> "p1_acquire" [style=dashed, arrowhead=odot, color=red];
+    "p1_using" -> "p1_release";
+    "p1_release" -> "p1_idle";
+    "p1_release" -> "resource";
+    "p2_idle" -> "p2_acquire";
+    "resource" -> "p2_acquire";
+    "p2_acquire" -> "p2_using";
+    "p1_using" -> "p2_acquire" [style=dashed, arrowhead=odot, color=red];
+    "p2_using" -> "p2_release";
+    "p2_release" -> "p2_idle";
+    "p2_release" -> "resource";
+}

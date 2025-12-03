@@ -1,0 +1,37 @@
+digraph PregelGraph {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Parallel Computation Graph";
+
+    // Channels
+    "ch_data_source" [shape=ellipse, style=filled, fillcolor="lightblue", label="data_source\n[LastValue]\n[1, 2, 3, 4, 5, 6, 7, 8, 9, 10..."];
+    "ch_worker_1_out" [shape=ellipse, style=filled, fillcolor="lightblue", label="worker_1_out\n[LastValue]\n[1, 2, 3]"];
+    "ch_worker_2_out" [shape=ellipse, style=filled, fillcolor="lightblue", label="worker_2_out\n[LastValue]\n[4, 5, 6]"];
+    "ch_worker_3_out" [shape=ellipse, style=filled, fillcolor="lightblue", label="worker_3_out\n[LastValue]\n[7, 8]"];
+    "ch_worker_4_out" [shape=ellipse, style=filled, fillcolor="lightblue", label="worker_4_out\n[LastValue]\n[9, 10]"];
+    "ch_aggregated_sum" [shape=ellipse, style=filled, fillcolor="lightgreen", label="aggregated_sum\n[BinaryOperator]\n110"];
+
+    // Nodes
+    "node_worker_1" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="worker_1\n(succeeded)"];
+    "node_worker_2" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="worker_2\n(succeeded)"];
+    "node_worker_3" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="worker_3\n(succeeded)"];
+    "node_worker_4" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="worker_4\n(succeeded)"];
+
+    // Subscriptions (channel -> node)
+    "ch_data_source" -> "node_worker_1" [style=dashed, color=blue];
+    "ch_data_source" -> "node_worker_2" [style=dashed, color=blue];
+    "ch_data_source" -> "node_worker_3" [style=dashed, color=blue];
+    "ch_data_source" -> "node_worker_4" [style=dashed, color=blue];
+
+    // Writes (node -> channel)
+    "node_worker_1" -> "ch_worker_1_out" [label="result", color=green];
+    "node_worker_1" -> "ch_aggregated_sum" [label="partial", color=green];
+    "node_worker_2" -> "ch_worker_2_out" [label="result", color=green];
+    "node_worker_2" -> "ch_aggregated_sum" [label="partial", color=green];
+    "node_worker_3" -> "ch_worker_3_out" [label="result", color=green];
+    "node_worker_3" -> "ch_aggregated_sum" [label="partial", color=green];
+    "node_worker_4" -> "ch_worker_4_out" [label="result", color=green];
+    "node_worker_4" -> "ch_aggregated_sum" [label="partial", color=green];
+}

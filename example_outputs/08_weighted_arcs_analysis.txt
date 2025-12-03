@@ -1,0 +1,41 @@
+============================================================
+PETRI NET REACHABILITY ANALYSIS
+============================================================
+
+SUMMARY
+----------------------------------------
+  Places:          3
+  Transitions:     1
+  Reachable states: 4
+  Edges:           3
+  Analysis complete: Yes
+
+PROPERTIES
+----------------------------------------
+  Bounded:         Yes
+  Deadlock-free:   No
+  Deadlock states: 1
+
+PLACE BOUNDS
+----------------------------------------
+  H2: max=6, capacity=inf
+  H2O: max=6, capacity=inf
+  O2: max=3, capacity=inf
+
+INITIAL MARKING
+----------------------------------------
+  H2: 6
+  H2O: 0
+  O2: 3
+
+DEADLOCK MARKINGS
+----------------------------------------
+  State 3: {H2:0, H2O:6, O2:0}
+
+TRANSITION INFO
+----------------------------------------
+  react:
+    Input arcs:  {H2:2, O2:1}
+    Output arcs: {H2O:2}
+
+============================================================

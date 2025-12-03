@@ -1,0 +1,51 @@
+============================================================
+PETRI NET REACHABILITY ANALYSIS
+============================================================
+
+SUMMARY
+----------------------------------------
+  Places:          6
+  Transitions:     4
+  Reachable states: 3
+  Edges:           4
+  Analysis complete: Yes
+
+PROPERTIES
+----------------------------------------
+  Bounded:         Yes
+  Deadlock-free:   Yes
+
+PLACE BOUNDS
+----------------------------------------
+  fork1: max=1, capacity=inf
+  fork2: max=1, capacity=inf
+  phil1_eating: max=1, capacity=inf
+  phil1_thinking: max=1, capacity=inf
+  phil2_eating: max=1, capacity=inf
+  phil2_thinking: max=1, capacity=inf
+
+INITIAL MARKING
+----------------------------------------
+  fork1: 1
+  fork2: 1
+  phil1_eating: 0
+  phil1_thinking: 1
+  phil2_eating: 0
+  phil2_thinking: 1
+
+TRANSITION INFO
+----------------------------------------
+  phil1_pickup:
+    Input arcs:  {phil1_thinking:1, fork1:1, fork2:1}
+    Output arcs: {phil1_eating:1}
+  phil1_putdown:
+    Input arcs:  {phil1_eating:1}
+    Output arcs: {phil1_thinking:1, fork1:1, fork2:1}
+  phil2_pickup:
+    Input arcs:  {phil2_thinking:1, fork1:1, fork2:1}
+    Output arcs: {phil2_eating:1}
+  phil2_putdown:
+    Input arcs:  {phil2_eating:1}
+    Output arcs: {phil2_thinking:1, fork1:1, fork2:1}
+
+============================================================

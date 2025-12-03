@@ -1,0 +1,18 @@
+digraph ReachabilityGraph {
+    rankdir=TB;
+    node [fontname="Arial", shape=box, style=rounded];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Mutex with Inhibitor Arcs - Reachability";
+
+    // Markings
+    "M0" [label="M0 (initial)\n{p1_idle:1, p1_using:0, p2_idle:1, p2_using:0, resource:1}", style=filled, fillcolor="lightblue"];
+    "M1" [label="M1\n{p1_idle:0, p1_using:1, p2_idle:1, p2_using:0, resource:0}", style=filled, fillcolor="white"];
+    "M2" [label="M2\n{p1_idle:1, p1_using:0, p2_idle:0, p2_using:1, resource:0}", style=filled, fillcolor="white"];
+
+    // Transitions
+    "M0" -> "M1" [label="p1_acquire"];
+    "M0" -> "M2" [label="p2_acquire"];
+    "M1" -> "M0" [label="p1_release"];
+    "M2" -> "M0" [label="p2_release"];
+}

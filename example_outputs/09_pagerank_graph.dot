@@ -1,0 +1,61 @@
+digraph PregelGraph {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="PageRank Graph";
+
+    // Channels
+    "ch_rank_A" [shape=ellipse, style=filled, fillcolor="lightblue", label="rank_A\n[LastValue]\n{'rank': 0.2555673827176243, '..."];
+    "ch_inbox_A" [shape=ellipse, style=filled, fillcolor="lightcoral", label="inbox_A\n[Accumulator]\n0.0"];
+    "ch_rank_B" [shape=ellipse, style=filled, fillcolor="lightblue", label="rank_B\n[LastValue]\n{'rank': 0.1336160954767337, '..."];
+    "ch_inbox_B" [shape=ellipse, style=filled, fillcolor="lightcoral", label="inbox_B\n[Accumulator]\n0.0"];
+    "ch_rank_C" [shape=ellipse, style=filled, fillcolor="lightblue", label="rank_C\n[LastValue]\n{'rank': 0.19040295900779777, ..."];
+    "ch_inbox_C" [shape=ellipse, style=filled, fillcolor="lightcoral", label="inbox_C\n[Accumulator]\n0.0"];
+    "ch_rank_D" [shape=ellipse, style=filled, fillcolor="lightblue", label="rank_D\n[LastValue]\n{'rank': 0.16270816861292095, ..."];
+    "ch_inbox_D" [shape=ellipse, style=filled, fillcolor="lightcoral", label="inbox_D\n[Accumulator]\n0.0"];
+    "ch_rank_E" [shape=ellipse, style=filled, fillcolor="lightblue", label="rank_E\n[LastValue]\n{'rank': 0.1633020449444049, '..."];
+    "ch_inbox_E" [shape=ellipse, style=filled, fillcolor="lightcoral", label="inbox_E\n[Accumulator]\n0.0"];
+    "ch_rank_F" [shape=ellipse, style=filled, fillcolor="lightblue", label="rank_F\n[LastValue]\n{'rank': 0.09440334924051821, ..."];
+    "ch_inbox_F" [shape=ellipse, style=filled, fillcolor="lightcoral", label="inbox_F\n[Accumulator]\n0.0"];
+
+    // Nodes
+    "node_vertex_A" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="vertex_A\n(succeeded)"];
+    "node_vertex_B" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="vertex_B\n(succeeded)"];
+    "node_vertex_C" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="vertex_C\n(succeeded)"];
+    "node_vertex_D" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="vertex_D\n(succeeded)"];
+    "node_vertex_E" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="vertex_E\n(succeeded)"];
+    "node_vertex_F" [shape=box, style="filled,rounded", fillcolor="lightgreen", label="vertex_F\n(succeeded)"];
+
+    // Subscriptions (channel -> node)
+    "ch_rank_A" -> "node_vertex_A" [style=dashed, color=blue];
+    "ch_inbox_A" -> "node_vertex_A" [style=dashed, color=blue];
+    "ch_rank_B" -> "node_vertex_B" [style=dashed, color=blue];
+    "ch_inbox_B" -> "node_vertex_B" [style=dashed, color=blue];
+    "ch_rank_C" -> "node_vertex_C" [style=dashed, color=blue];
+    "ch_inbox_C" -> "node_vertex_C" [style=dashed, color=blue];
+    "ch_rank_D" -> "node_vertex_D" [style=dashed, color=blue];
+    "ch_inbox_D" -> "node_vertex_D" [style=dashed, color=blue];
+    "ch_rank_E" -> "node_vertex_E" [style=dashed, color=blue];
+    "ch_inbox_E" -> "node_vertex_E" [style=dashed, color=blue];
+    "ch_rank_F" -> "node_vertex_F" [style=dashed, color=blue];
+    "ch_inbox_F" -> "node_vertex_F" [style=dashed, color=blue];
+
+    // Writes (node -> channel)
+    "node_vertex_A" -> "ch_rank_A" [label="rank", color=green];
+    "node_vertex_A" -> "ch_inbox_B" [label="to_B", color=green];
+    "node_vertex_A" -> "ch_inbox_C" [label="to_C", color=green];
+    "node_vertex_B" -> "ch_rank_B" [label="rank", color=green];
+    "node_vertex_B" -> "ch_inbox_C" [label="to_C", color=green];
+    "node_vertex_B" -> "ch_inbox_D" [label="to_D", color=green];
+    "node_vertex_C" -> "ch_rank_C" [label="rank", color=green];
+    "node_vertex_C" -> "ch_inbox_A" [label="to_A", color=green];
+    "node_vertex_C" -> "ch_inbox_D" [label="to_D", color=green];
+    "node_vertex_D" -> "ch_rank_D" [label="rank", color=green];
+    "node_vertex_D" -> "ch_inbox_E" [label="to_E", color=green];
+    "node_vertex_E" -> "ch_rank_E" [label="rank", color=green];
+    "node_vertex_E" -> "ch_inbox_A" [label="to_A", color=green];
+    "node_vertex_E" -> "ch_inbox_F" [label="to_F", color=green];
+    "node_vertex_F" -> "ch_rank_F" [label="rank", color=green];
+    "node_vertex_F" -> "ch_inbox_A" [label="to_A", color=green];
+}

@@ -1,0 +1,66 @@
+============================================================
+PETRI NET REACHABILITY ANALYSIS
+============================================================
+
+SUMMARY
+----------------------------------------
+  Places:          8
+  Transitions:     6
+  Reachable states: 6
+  Edges:           8
+  Analysis complete: Yes
+
+PROPERTIES
+----------------------------------------
+  Bounded:         Yes
+  Deadlock-free:   No
+  Deadlock states: 1
+
+PLACE BOUNDS
+----------------------------------------
+  fork1: max=1, capacity=inf
+  fork2: max=1, capacity=inf
+  phil1_eating: max=1, capacity=inf
+  phil1_has_left: max=1, capacity=inf
+  phil1_thinking: max=1, capacity=inf
+  phil2_eating: max=1, capacity=inf
+  phil2_has_left: max=1, capacity=inf
+  phil2_thinking: max=1, capacity=inf
+
+INITIAL MARKING
+----------------------------------------
+  fork1: 1
+  fork2: 1
+  phil1_eating: 0
+  phil1_has_left: 0
+  phil1_thinking: 1
+  phil2_eating: 0
+  phil2_has_left: 0
+  phil2_thinking: 1
+
+DEADLOCK MARKINGS
+----------------------------------------
+  State 4: {fork1:0, fork2:0, phil1_eating:0, phil1_has_left:1, phil1_thinking:0, phil2_eating:0, phil2_has_left:1, phil2_thinking:0}
+
+TRANSITION INFO
+----------------------------------------
+  phil1_release:
+    Input arcs:  {phil1_eating:1}
+    Output arcs: {phil1_thinking:1, fork1:1, fork2:1}
+  phil1_take_left:
+    Input arcs:  {phil1_thinking:1, fork1:1}
+    Output arcs: {phil1_has_left:1}
+  phil1_take_right:
+    Input arcs:  {phil1_has_left:1, fork2:1}
+    Output arcs: {phil1_eating:1}
+  phil2_release:
+    Input arcs:  {phil2_eating:1}
+    Output arcs: {phil2_thinking:1, fork1:1, fork2:1}
+  phil2_take_left:
+    Input arcs:  {phil2_thinking:1, fork2:1}
+    Output arcs: {phil2_has_left:1}
+  phil2_take_right:
+    Input arcs:  {phil2_has_left:1, fork1:1}
+    Output arcs: {phil2_eating:1}
+
+============================================================

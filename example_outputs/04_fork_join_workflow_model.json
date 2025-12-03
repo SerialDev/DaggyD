@@ -1,0 +1,121 @@
+{
+  "places": {
+    "start": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "branch_a": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    },
+    "branch_b": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    },
+    "done_a": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    },
+    "done_b": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    },
+    "end": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    }
+  },
+  "transitions": {
+    "fork": {
+      "consume_from": [
+        [
+          "start",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "branch_a",
+          1
+        ],
+        [
+          "branch_b",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 4
+    },
+    "process_a": {
+      "consume_from": [
+        [
+          "branch_a",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "done_a",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 8
+    },
+    "process_b": {
+      "consume_from": [
+        [
+          "branch_b",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "done_b",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 8
+    },
+    "join": {
+      "consume_from": [
+        [
+          "done_a",
+          1
+        ],
+        [
+          "done_b",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "end",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 4
+    }
+  },
+  "step": 0,
+  "marking": {
+    "start": 1,
+    "branch_a": 0,
+    "branch_b": 0,
+    "done_a": 0,
+    "done_b": 0,
+    "end": 0
+  }
+}

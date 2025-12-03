@@ -1,0 +1,191 @@
+{
+  "places": {
+    "fork1": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "fork2": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "phil1_thinking": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "phil1_has_left": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    },
+    "phil1_eating": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    },
+    "phil2_thinking": {
+      "tokens": 1,
+      "capacity": Infinity,
+      "initial_tokens": 1
+    },
+    "phil2_has_left": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    },
+    "phil2_eating": {
+      "tokens": 0,
+      "capacity": Infinity,
+      "initial_tokens": 0
+    }
+  },
+  "transitions": {
+    "phil1_take_left": {
+      "consume_from": [
+        [
+          "phil1_thinking",
+          1
+        ],
+        [
+          "fork1",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "phil1_has_left",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 8
+    },
+    "phil1_take_right": {
+      "consume_from": [
+        [
+          "phil1_has_left",
+          1
+        ],
+        [
+          "fork2",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "phil1_eating",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 4
+    },
+    "phil1_release": {
+      "consume_from": [
+        [
+          "phil1_eating",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "phil1_thinking",
+          1
+        ],
+        [
+          "fork1",
+          1
+        ],
+        [
+          "fork2",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 4
+    },
+    "phil2_take_left": {
+      "consume_from": [
+        [
+          "phil2_thinking",
+          1
+        ],
+        [
+          "fork2",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "phil2_has_left",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 8
+    },
+    "phil2_take_right": {
+      "consume_from": [
+        [
+          "phil2_has_left",
+          1
+        ],
+        [
+          "fork1",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "phil2_eating",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 4
+    },
+    "phil2_release": {
+      "consume_from": [
+        [
+          "phil2_eating",
+          1
+        ]
+      ],
+      "produce_to": [
+        [
+          "phil2_thinking",
+          1
+        ],
+        [
+          "fork1",
+          1
+        ],
+        [
+          "fork2",
+          1
+        ]
+      ],
+      "inhibitor_from": [],
+      "priority": 0,
+      "fire_count": 4
+    }
+  },
+  "step": 0,
+  "marking": {
+    "fork1": 1,
+    "fork2": 1,
+    "phil1_thinking": 1,
+    "phil1_has_left": 0,
+    "phil1_eating": 0,
+    "phil2_thinking": 1,
+    "phil2_has_left": 0,
+    "phil2_eating": 0
+  }
+}

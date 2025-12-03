@@ -1,0 +1,15 @@
+digraph PregelDataflow {
+    rankdir=LR;
+    node [fontname="Arial", shape=box, style="filled,rounded"];
+    edge [fontname="Arial"];
+    labelloc="t";
+    label="Parallel Computation Dataflow";
+
+    // Nodes
+    "worker_1" [fillcolor="lightgreen"];
+    "worker_2" [fillcolor="lightgreen"];
+    "worker_3" [fillcolor="lightgreen"];
+    "worker_4" [fillcolor="lightgreen"];
+
+    // Dataflow edges
+}
